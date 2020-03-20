@@ -9,6 +9,7 @@ namespace TrainingProject.Data
 {
     public class DataContext: DbContext
     {
+        #region Properties
         public DbSet<Booking> Bookings { get; set; }
 
         public DbSet<City> Cities { get; set; }
@@ -24,6 +25,7 @@ namespace TrainingProject.Data
         public DbSet<Payment> Payments { get; set; }
 
         public DbSet<Room> Rooms { get; set; }
+        #endregion
 
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
@@ -40,6 +42,8 @@ namespace TrainingProject.Data
             modelBuilder.ApplyConfiguration(new CityConfiguration());
 
             modelBuilder.ApplyConfiguration(new ClientConfiguration());
+
+            modelBuilder.ApplyConfiguration(new EventLogConfiguration());
 
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
 

@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Core;
 
 namespace TrainingProject.Web
 {
@@ -14,13 +16,48 @@ namespace TrainingProject.Web
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try
+            {
+                Log.Logger = SerilogConfiguration();
+                Log.Information("TrainingProject: LogAndSourceSuccesfullyAdded");
+
+                CreateWebHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "TrainingProject: LogHostTerminated");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureLogging(builder => builder.ClearProviders()
-                    .AddSerilog().AddDebug().AddConsole())
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+        {
+            var webHostBuilder = WebHost.CreateDefaultBuilder(args)
+                                        .UseSerilog()
+                                        .UseStartup<Startup>();
+
+            return webHostBuilder;
+        }
+
+        /// <summary>
+        /// Конфигурирование логирования (Serilog).
+        /// </summary>
+        /// <returns>Конфигурация.</returns>
+        private static Logger SerilogConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                    .Build();
+
+            var serilogConfig = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            return serilogConfig;
+        }
     }
 }

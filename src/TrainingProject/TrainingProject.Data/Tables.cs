@@ -14,6 +14,8 @@ namespace TrainingProject.Data
 
         public static readonly string Country = nameof(Country);
 
+        public static readonly string EventLog = nameof(EventLog);
+
         public static readonly string Gallery = nameof(Gallery);
 
         public static readonly string Hotel = nameof(Hotel);
