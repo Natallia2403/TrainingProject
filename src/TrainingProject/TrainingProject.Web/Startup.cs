@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TrainingProject.Data;
 using TrainingProject.Domain.Logic;
+using TrainingProject.Web.Interfaces;
+using TrainingProject.Web.Managers;
 
 namespace TrainingProject.Web
 {
@@ -38,6 +40,10 @@ namespace TrainingProject.Web
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainingProjectConnectionString"))
                                                        .EnableSensitiveDataLogging());
             services.AddMvc();
+
+            services.AddScoped<IHotelManager, HotelManager>();
+            services.AddScoped<ICountryManager, CountryManager>();
+            services.AddScoped<IRoomManager, RoomManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

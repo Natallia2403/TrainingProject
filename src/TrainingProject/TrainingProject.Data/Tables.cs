@@ -8,8 +8,6 @@ namespace TrainingProject.Data
     {
         public static readonly string Booking = nameof(Booking);
 
-        public static readonly string City = nameof(City);
-
         public static readonly string Client = nameof(Client);
 
         public static readonly string Country = nameof(Country);

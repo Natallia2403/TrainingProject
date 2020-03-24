@@ -16,21 +16,21 @@ namespace TrainingProject.Web
     {
         public static void Main(string[] args)
         {
-            try
-            {
-                Log.Logger = SerilogConfiguration();
-                Log.Information("TrainingProject: LogAndSourceSuccesfullyAdded");
+            //try
+            //{
+            //    Log.Logger = SerilogConfiguration();
+            //    Log.Information("TrainingProject: LogAndSourceSuccesfullyAdded");
 
                 CreateWebHostBuilder(args).Build().Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "TrainingProject: LogHostTerminated");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    Log.Fatal(ex, "TrainingProject: LogHostTerminated");
+            //}
+            //finally
+            //{
+            //    Log.CloseAndFlush();
+            //}
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)

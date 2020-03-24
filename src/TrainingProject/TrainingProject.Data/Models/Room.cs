@@ -12,7 +12,7 @@ namespace TrainingProject.Data.Models
 
         public int MaxNumberOfGuests { get; set; }
 
-        public decimal Price { get; set; }
+        public int Price { get; set; }
 
         /// <summary>
         /// В процентах

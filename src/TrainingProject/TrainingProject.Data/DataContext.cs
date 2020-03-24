@@ -12,8 +12,6 @@ namespace TrainingProject.Data
         #region Properties
         public DbSet<Booking> Bookings { get; set; }
 
-        public DbSet<City> Cities { get; set; }
-
         public DbSet<Client> Clients { get; set; }
 
         public DbSet<Country> Countries { get; set; }
@@ -30,7 +28,7 @@ namespace TrainingProject.Data
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
-            Database.Migrate();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,8 +36,6 @@ namespace TrainingProject.Data
             modelBuilder = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
 
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
-
-            modelBuilder.ApplyConfiguration(new CityConfiguration());
 
             modelBuilder.ApplyConfiguration(new ClientConfiguration());
 

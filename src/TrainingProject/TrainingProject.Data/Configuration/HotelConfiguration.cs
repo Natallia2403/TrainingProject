@@ -20,9 +20,9 @@ namespace TrainingProject.Data.Configuration
             builder.Property(ag => ag.Id)
                     .ValueGeneratedOnAdd();
 
-            builder.HasOne(ag => ag.City)//Методы HasOne и HasMany устанавливают навигационное свойство для сущности, для которой производится конфигурация
+            builder.HasOne(ag => ag.Country)//Методы HasOne и HasMany устанавливают навигационное свойство для сущности, для которой производится конфигурация
                     .WithMany(t => t.Hotels)//методы WithOne и WithMany идентифицируют навигационное свойство на стороне связанной сущности
-                    .HasForeignKey(p => p.CityId)//внешний ключ
+                    .HasForeignKey(p => p.CountryId)//внешний ключ
                     .OnDelete(DeleteBehavior.Restrict);
         }
     }

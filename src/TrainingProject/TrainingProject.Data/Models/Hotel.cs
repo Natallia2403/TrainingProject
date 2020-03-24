@@ -18,9 +18,9 @@ namespace TrainingProject.Data.Models
 
         public bool IsAppartment { get; set; }
 
-        public int CityId { get; set; }
+        public int CountryId { get; set; }
 
-        public City City { get; set; }
+        public Country Country { get; set; }
 
         public List<Gallery> Galleries { get; set; }
 
