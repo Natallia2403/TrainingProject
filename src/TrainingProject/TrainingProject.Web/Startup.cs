@@ -6,6 +6,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using TrainingProject.Data;
+using TrainingProject.Data.Models;
 using TrainingProject.Domain.Logic;
 using TrainingProject.Web.Interfaces;
 using TrainingProject.Web.Managers;
@@ -41,6 +43,9 @@ namespace TrainingProject.Web
                                                        .EnableSensitiveDataLogging());
             services.AddMvc();
 
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>();
+
             services.AddScoped<IHotelManager, HotelManager>();
             services.AddScoped<ICountryManager, CountryManager>();
             services.AddScoped<IRoomManager, RoomManager>();
@@ -59,9 +64,8 @@ namespace TrainingProject.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
-
-            //app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             app.UseEndpoints(endpoints =>
             {

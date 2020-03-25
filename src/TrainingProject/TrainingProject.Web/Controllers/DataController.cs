@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TrainingProject.Data;
 using TrainingProject.Data.Models;
@@ -16,18 +17,24 @@ namespace TrainingProject.Web.Controllers
         IHotelManager _hotelManager;
         ICountryManager _countryManager;
         IRoomManager _roomManager;
+        UserManager<User> _userManager;
+        RoleManager<IdentityRole> _roleManager;
 
-        public DataController(DataContext context, IHotelManager hotelManager, ICountryManager countryManager, IRoomManager roomManager)
+        public DataController(DataContext context, IHotelManager hotelManager, ICountryManager countryManager, IRoomManager roomManager
+                                , UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             context = context ?? throw new ArgumentNullException(nameof(context));
             _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
             _countryManager = countryManager ?? throw new ArgumentNullException(nameof(countryManager));
             _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
 
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
+
             db = context;
         }
 
-        public IActionResult Add()
+        public async Task<IActionResult> AddAsync()
         {
             //Countries
             Country country1 = new Country { Name = "Беларусь" };
@@ -64,34 +71,43 @@ namespace TrainingProject.Web.Controllers
             db.Hotels.Add(hotel2);
             db.Hotels.Add(hotel3);
             db.Hotels.Add(hotel4);
-            
+
+            //Rooms
+            Room room1 = new Room { Hotel = hotel1, Description="Номер Люкс", HasBalcony = true, HasKitchen = true, MaxNumberOfGuests=4, Price=100};
+            Room room2 = new Room { Hotel = hotel1, Description = "Номер Эконом", HasBalcony = false, HasKitchen = false, MaxNumberOfGuests=2, Price=20};
+
+            db.Rooms.Add(room1);
+            db.Rooms.Add(room2);
+
+            //Users & Roles
+            string adminEmail = "natallia.2403@gmail.com";
+            string password = "Aa1234567+";
+
+            if (await _roleManager.FindByNameAsync("admin") == null)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("admin"));
+            }
+            if (await _roleManager.FindByNameAsync("employee") == null)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("employee"));
+            }
+            if (await _roleManager.FindByNameAsync("employer") == null)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("employer"));
+            }
+            if (await _userManager.FindByNameAsync(adminEmail) == null)
+            {
+                User admin = new User { Email = adminEmail, UserName = adminEmail };
+                IdentityResult result = await _userManager.CreateAsync(admin, password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(admin, "admin");
+                }
+            }
+
             db.SaveChanges();
 
             return View();
         }
-
-        [HttpGet]
-        public IActionResult CreateRoom()
-        {
-            IEnumerable<Hotel> hotels = _hotelManager.GetAll();
-
-            RoomViewModel rhvm = new RoomViewModel { Hotels = hotels };
-
-            return View(rhvm);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateRoom(Room room)
-        {
-            await _roomManager.AddAsync(room);
-
-            return RedirectToAction("CreateRoom");
-        }
-
-        //[HttpPost]
-        //public async Task<IActionResult> CreateRoom(string HotelId, string Description, int MaxNumberOfGuests, int Price, bool IsBalcony, bool IsKitchen)
-        //{
-        //    return RedirectToAction("CreateRoom");
-        //}
     }
 }

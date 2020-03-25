@@ -19,9 +19,9 @@ namespace TrainingProject.Data.Models
         /// </summary>
         public int PrePayment { get; set; }
 
-        public bool IsBalcony { get; set; }
+        public bool HasBalcony { get; set; }
 
-        public bool IsKitchen { get; set; }
+        public bool HasKitchen { get; set; }
 
         public int HotelId { get; set; }
 
