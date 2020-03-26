@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Web.Interfaces;
+using BookingSite.Domain.Logic.Interfaces;
 
-namespace BookingSite.Web.Managers
+namespace BookingSite.Domain.Logic.Managers
 {
     public class RoomManager : IRoomManager
     {
@@ -18,16 +18,17 @@ namespace BookingSite.Web.Managers
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
         }
 
-        public IEnumerable<Room> GetAll()
+        public async Task<IEnumerable<Room>> GetAllAsync()
         {
-            return _dataContext.Rooms.ToList();
+            return await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).ToListAsync();
         }
 
-        public Room GetById(int? id)
+        public async Task<Room> GetByIdAsync(int? id)
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            Room room = _dataContext.Rooms.Include(u => u.Hotel).FirstOrDefault(h => h.Id == id);
+            var room = await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).FirstOrDefaultAsync(h => h.Id == id);
+
             if (room != null)
                 return room;
             throw new Exception("Комната не найдена");
@@ -55,7 +56,8 @@ namespace BookingSite.Web.Managers
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            Room room = GetById(id);
+            var room = await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).FirstOrDefaultAsync(h => h.Id == id);
+
             if (room != null)
             {
                 _dataContext.Rooms.Remove(room);

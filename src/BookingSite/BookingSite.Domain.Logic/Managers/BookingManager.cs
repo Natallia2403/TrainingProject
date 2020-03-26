@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using BookingSite.Web.Interfaces;
+using BookingSite.Domain.Logic.Interfaces;
 
-namespace BookingSite.Web.Managers
+namespace BookingSite.Domain.Logic.Managers
 {
     public class BookingManager : IBookingManager
     {

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data.Models;
+using BookingSite.Domain.DTO;
 
-namespace BookingSite.Web.Interfaces
+namespace BookingSite.Domain.Logic.Interfaces
 {
     public interface ICountryManager
     {
-        IEnumerable<Country> GetAll();
+        Task<IEnumerable<Country>> GetAllAsync();
     }
 }

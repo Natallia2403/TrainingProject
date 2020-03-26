@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data.Models;
-using BookingSite.Web.ViewModels;
 
-namespace BookingSite.Web.Interfaces
+namespace BookingSite.Domain.Logic.Interfaces
 {
     public interface IHotelManager
     {
         Task AddAsync(Hotel hotel);
 
-        IEnumerable<Hotel> GetAll();
+        Task<IEnumerable<Hotel>> GetAllAsync();
 
-        Hotel GetById(int? id);
+        Task<Hotel> GetByIdAsync(int? id);
 
         Task UpdateAsync(Hotel hotel);
 

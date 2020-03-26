@@ -21,6 +21,7 @@ else
 }
 
 <form class="form-inline">
+    <a asp-action="HotelCreate">Добавить отель</a>
     <table class="table">
 
         @foreach (Hotel h in Model.Hotels)
@@ -28,7 +29,9 @@ else
             <tr>
                 <td>@h.Name</td>
                 <td>
-                    <a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id">Подробнее</a> 
+                    <a asp-action="HotelDetails" asp-controller="Manage" asp-route-id="@h.Id">Подробнее</a> |
+                    <a asp-action="HotelEdit" asp-controller="Manage" asp-route-id="@h.Id">Изменить</a> |
+                    <a asp-action="HotelDelete" asp-controller="Manage" asp-route-id="@h.Id" onclick="javascript:return confirm('Вы действительно хотите удалить данный отель?')">Удалить</a>
                 </td>
             </tr>
         }

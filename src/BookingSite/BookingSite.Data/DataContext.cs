@@ -10,7 +10,6 @@ namespace BookingSite.Data
 {
     public class DataContext : IdentityDbContext<User>
     {
-        #region Properties
         public DbSet<Booking> Bookings { get; set; }
 
         public DbSet<Client> Clients { get; set; }
@@ -24,12 +23,11 @@ namespace BookingSite.Data
         public DbSet<Payment> Payments { get; set; }
 
         public DbSet<Room> Rooms { get; set; }
-        #endregion
 
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            Database.Migrate();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

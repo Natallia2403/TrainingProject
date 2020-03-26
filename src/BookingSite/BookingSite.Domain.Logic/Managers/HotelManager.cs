@@ -5,10 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Web.Interfaces;
-using BookingSite.Web.ViewModels;
+using BookingSite.Domain.Logic.Interfaces;
 
-namespace BookingSite.Web.Managers
+namespace BookingSite.Domain.Logic.Managers
 {
     public class HotelManager : IHotelManager
     {
@@ -28,16 +27,16 @@ namespace BookingSite.Web.Managers
             await _dataContext.SaveChangesAsync();
         }
 
-        public IEnumerable<Hotel> GetAll()
+        public async Task<IEnumerable<Hotel>> GetAllAsync()
         {
-            return _dataContext.Hotels.Include(u => u.Country).Include(u => u.Rooms).ToList();
+            return await _dataContext.Hotels.AsNoTracking().Include(u => u.Country).Include(u => u.Rooms).ToListAsync();
         }
 
-        public Hotel GetById(int? id)
+        public async Task<Hotel> GetByIdAsync(int? id)
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            Hotel hotel = _dataContext.Hotels.Include(u => u.Country).Include(u => u.Rooms).FirstOrDefault(h => h.Id == id);
+            Hotel hotel = await _dataContext.Hotels.AsNoTracking().Include(u => u.Country).Include(u => u.Rooms).FirstOrDefaultAsync(h => h.Id == id);
             if (hotel != null)
                 return hotel;
             throw new Exception("Отель не найден");
@@ -56,7 +55,8 @@ namespace BookingSite.Web.Managers
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            Hotel hotel = GetById(id);
+            Hotel hotel = await _dataContext.Hotels.AsNoTracking().Include(u => u.Country).Include(u => u.Rooms).FirstOrDefaultAsync(h => h.Id == id);
+
             if (hotel != null)
             {
                 if(hotel.Rooms != null && hotel.Rooms.Count > 0)

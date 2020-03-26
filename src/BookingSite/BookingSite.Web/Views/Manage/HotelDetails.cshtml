@@ -29,6 +29,7 @@
 </div>
 
 <form>
+    <a href="~/Manage/RoomCreate?roomId=@Model.Id">Добавить комнату</a>
     <table class="table">
 
         @foreach (Room r in Model.Rooms)
@@ -36,7 +37,9 @@
             <tr>
                 <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
                 <td rowspan="2">
-                    <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id">Подробнее</a> 
+                    <a asp-action="RoomDetails" asp-controller="Manage" asp-route-id="@r.Id">Подробнее</a> |
+                    <a asp-action="RoomEdit" asp-controller="Manage" asp-route-id="@r.Id">Изменить</a> |
+                    <a asp-action="RoomDelete" asp-controller="Manage" asp-route-id="@r.Id" onclick="javascript:return confirm('Вы действительно хотите удалить данную комнату?')">Удалить</a>
                 </td>
             </tr>
             <tr>

@@ -16,8 +16,8 @@ using Microsoft.Extensions.Logging;
 using BookingSite.Data;
 using BookingSite.Data.Models;
 using BookingSite.Domain.Logic;
-using BookingSite.Web.Interfaces;
-using BookingSite.Web.Managers;
+using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Logic.Managers;
 
 namespace BookingSite.Web
 {

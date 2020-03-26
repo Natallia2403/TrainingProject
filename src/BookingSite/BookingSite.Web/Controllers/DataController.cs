@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Web.Interfaces;
-using BookingSite.Web.ViewModels;
+using BookingSite.Domain.Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingSite.Web.Controllers
 {
     public class DataController : Controller
     {
-        DataContext db;
+        DataContext _dataContext;
         IHotelManager _hotelManager;
         ICountryManager _countryManager;
         IRoomManager _roomManager;
@@ -31,7 +31,7 @@ namespace BookingSite.Web.Controllers
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 
-            db = context;
+            _dataContext = context;
         }
 
         public async Task<IActionResult> AddAsync()
@@ -44,12 +44,12 @@ namespace BookingSite.Web.Controllers
             Country country5 = new Country { Name = "Швеция" };
             Country country6 = new Country { Name = "Финляндия" };
 
-            db.Countries.Add(country1);
-            db.Countries.Add(country2);
-            db.Countries.Add(country3);
-            db.Countries.Add(country4);
-            db.Countries.Add(country5);
-            db.Countries.Add(country6);
+            _dataContext.Countries.Add(country1);
+            _dataContext.Countries.Add(country2);
+            _dataContext.Countries.Add(country3);
+            _dataContext.Countries.Add(country4);
+            _dataContext.Countries.Add(country5);
+            _dataContext.Countries.Add(country6);
 
             //Clients
             Client client1 = new Client { FirstName = "Иван", LastName = "Иванов", Login = "ivan", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country1 };
@@ -57,9 +57,9 @@ namespace BookingSite.Web.Controllers
             Client client3 = new Client { FirstName = "Сидор", LastName = "Сидоров", Login = "sidor", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country3 };
             Client client4 = new Client { FirstName = "Наталия", LastName = "Ключникова", Login = "natalia", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country4 };
 
-            db.Clients.Add(client1);
-            db.Clients.Add(client2);
-            db.Clients.Add(client3);
+            _dataContext.Clients.Add(client1);
+            _dataContext.Clients.Add(client2);
+            _dataContext.Clients.Add(client3);
 
             //Hotels
             Hotel hotel1 = new Hotel { Name = "Парус", Country = country1, Stars = 3, IsAppartment = false };
@@ -67,17 +67,17 @@ namespace BookingSite.Web.Controllers
             Hotel hotel3 = new Hotel { Name = "Вивульскио", Country = country3, Stars = 3, IsAppartment = false };
             Hotel hotel4 = new Hotel { Name = "Шерлок", Country = country4, Stars = 3, IsAppartment = true };
 
-            db.Hotels.Add(hotel1);
-            db.Hotels.Add(hotel2);
-            db.Hotels.Add(hotel3);
-            db.Hotels.Add(hotel4);
+            _dataContext.Hotels.Add(hotel1);
+            _dataContext.Hotels.Add(hotel2);
+            _dataContext.Hotels.Add(hotel3);
+            _dataContext.Hotels.Add(hotel4);
 
             //Rooms
             Room room1 = new Room { Hotel = hotel1, Description="Номер Люкс", HasBalcony = true, HasKitchen = true, MaxNumberOfGuests=4, Price=100};
             Room room2 = new Room { Hotel = hotel1, Description = "Номер Эконом", HasBalcony = false, HasKitchen = false, MaxNumberOfGuests=2, Price=20};
 
-            db.Rooms.Add(room1);
-            db.Rooms.Add(room2);
+            _dataContext.Rooms.Add(room1);
+            _dataContext.Rooms.Add(room2);
 
             //Users & Roles
             string adminEmail = "natallia.2403@gmail.com";
@@ -101,7 +101,7 @@ namespace BookingSite.Web.Controllers
                 }
             }
 
-            db.SaveChanges();
+            _dataContext.SaveChanges();
 
             return View();
         }
