@@ -10,6 +10,7 @@ using BookingSite.Data.Models;
 using BookingSite.Domain.Logic.Interfaces;
 using BookingSite.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using BookingSite.Domain.DTO;
 
 namespace BookingSite.Web.Controllers
 {
@@ -30,55 +31,59 @@ namespace BookingSite.Web.Controllers
             _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
         }
 
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
-            var hotels = await _hotelManager.GetAllAsync();
+            var dto = await _hotelManager.GetAllAsync();
 
-            HomeViewModel hvm = new HomeViewModel { Hotels = hotels };
+            HomeViewModel hvm = new HomeViewModel { Hotels = dto };
 
             return View(hvm);
         }
 
         [HttpGet]
-        public async Task<IActionResult> HotelCreateAsync()
+        public async Task<IActionResult> HotelCreate()
         {
-            var countries = await _countryManager.GetAllAsync();
+            var dto = await _countryManager.GetAllAsync();
 
-            HotelViewModel chvm = new HotelViewModel { Countries = countries };
+            HotelViewModel viewModel = new HotelViewModel { Countries = dto };
 
-            return View(chvm);
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> HotelCreate(Hotel hotel)
+        public async Task<IActionResult> HotelCreate(HotelViewModel viewModel)
         {
-            await _hotelManager.AddAsync(hotel);
+            var dto = viewModel.Hotel;
+
+            await _hotelManager.AddAsync(dto);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> HotelDetailsAsync(int? id)
+        public async Task<IActionResult> HotelDetails(int? id)
         {
-            var hotel = await _hotelManager.GetByIdAsync(id);
+            var dto = await _hotelManager.GetByIdAsync(id);
 
-            return View(hotel);
+            return View(dto);
         }
 
-        public async Task<IActionResult> HotelEditAsync(int? id)
+        public async Task<IActionResult> HotelEdit(int? id)
         {
-            Hotel hotel = await _hotelManager.GetByIdAsync(id);
+            var dto = await _hotelManager.GetByIdAsync(id);
 
             var countries = await _countryManager.GetAllAsync();
 
-            HotelViewModel hvm = new HotelViewModel { Countries = countries, Hotel = hotel };
+            HotelViewModel hvm = new HotelViewModel { Countries = countries, Hotel = dto };
 
             return View(hvm);
         }
 
         [HttpPost]
-        public async Task<IActionResult> HotelEdit(HotelViewModel hotelViewModel)
+        public async Task<IActionResult> HotelEdit(HotelViewModel viewModel)
         {
-            await _hotelManager.UpdateAsync(hotelViewModel.Hotel);
+            var dto = viewModel.Hotel;
+
+            await _hotelManager.UpdateAsync(dto);
 
             return RedirectToAction("Index");
         }
@@ -86,55 +91,57 @@ namespace BookingSite.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> HotelDelete(int? id)
         {
-            var hotel = await _hotelManager.GetByIdAsync(id);
+            var dto = await _hotelManager.GetByIdAsync(id);
 
-            if (hotel.Rooms != null && hotel.Rooms.Count > 0)
+            if (dto.Rooms != null && dto.Rooms.Count > 0)
             {
                 throw new Exception("Пожалуйста, сначала удалите комнаты");
             }
 
-            await _hotelManager.DeleteAsync(hotel);
+            await _hotelManager.DeleteAsync(dto);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> RoomDetailsAsync(int? id)
+        public async Task<IActionResult> RoomDetails(int? id)
         {
-            Room room = await _roomManager.GetByIdAsync(id);
+            var dto = await _roomManager.GetByIdAsync(id);
 
-            return View(room);
+            return View(dto);
         }
 
-        public IActionResult RoomCreate(int? roomId)
+        public IActionResult RoomCreate(int? hotelId)
         {
-            ViewBag.HotelId = roomId;
+            ViewBag.HotelId = hotelId;
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> RoomCreate(Room room)
+        public async Task<IActionResult> RoomCreate(RoomDTO dto)
         {
-            await _roomManager.AddAsync(room);
+            await _roomManager.AddAsync(dto);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> RoomEditAsync(int? id)
+        public async Task<IActionResult> RoomEdit(int? id)
         {
-            Room room = await _roomManager.GetByIdAsync(id);
+            var dtoRoom = await _roomManager.GetByIdAsync(id);
 
-            var hotels = await _hotelManager.GetAllAsync();
+            var dtoHotels = await _hotelManager.GetAllAsync();
 
-            RoomViewModel rvm = new RoomViewModel { Hotels = hotels, Room = room };
+            RoomViewModel viewModel = new RoomViewModel { Hotels = dtoHotels, Room = dtoRoom };
 
-            return View(rvm);
+            return View(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> RoomEdit(RoomViewModel roomViewModel)
+        public async Task<IActionResult> RoomEdit(RoomViewModel viewModel)
         {
-            await _roomManager.UpdateAsync(roomViewModel.Room);
+            var dto = viewModel.Room;
+
+            await _roomManager.UpdateAsync(dto);
 
             return RedirectToAction("Index");
         }

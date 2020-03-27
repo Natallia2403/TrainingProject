@@ -22,12 +22,11 @@ namespace BookingSite.Domain.Logic.Managers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<Country>> GetAllAsync()
+        public async Task<IEnumerable<CountryDTO>> GetAllAsync()
         {
-            var countries = await _dataContext.Countries.AsNoTracking().ToListAsync();
-            //var dto = await _mapper.ProjectTo<CountryDTO>(countries).ToListAsync();
-            //var dto = _mapper.Map<IQueryable<CountryDTO>>(countries);
-            return countries;
+            var model = _dataContext.Countries.AsNoTracking();
+            var dto = await _mapper.ProjectTo<CountryDTO>(model).ToListAsync();
+            return dto;
         }
     }
 }

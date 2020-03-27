@@ -18,6 +18,7 @@ using BookingSite.Data.Models;
 using BookingSite.Domain.Logic;
 using BookingSite.Domain.Logic.Interfaces;
 using BookingSite.Domain.Logic.Managers;
+using System.Reflection;
 
 namespace BookingSite.Web
 {
@@ -37,7 +38,8 @@ namespace BookingSite.Web
             
             services.AddOpenApiDocument();
             services.AddControllers();
-            services.AddAutoMapper(typeof(Startup).Assembly);
+            //services.AddAutoMapper(typeof(Startup).Assembly);
+            services.AddAutoMapper(Assembly.Load("BookingSite.Data"));
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookingSiteConnectionString"))
                                                        .EnableSensitiveDataLogging());

@@ -3,19 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data.Models;
+using BookingSite.Domain.DTO;
 
 namespace BookingSite.Domain.Logic.Interfaces
 {
     public interface IRoomManager
     {
-        Task AddAsync(Room room);
+        Task<IEnumerable<RoomDTO>> GetAllAsync();
 
-        Task<IEnumerable<Room>> GetAllAsync();
+        Task<RoomDTO> GetByIdAsync(int? id);
 
-        Task<Room> GetByIdAsync(int? id);
+        Task AddAsync(RoomDTO dto);
 
-        Task UpdateAsync(Room room);
+        Task UpdateAsync(RoomDTO dto);
 
         Task DeleteAsync(int? id);
+
+        Task DeleteAsync(RoomDTO dto);
     }
 }

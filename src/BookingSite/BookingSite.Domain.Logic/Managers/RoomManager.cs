@@ -6,48 +6,62 @@ using System.Threading.Tasks;
 using BookingSite.Data;
 using BookingSite.Data.Models;
 using BookingSite.Domain.Logic.Interfaces;
+using AutoMapper;
+using BookingSite.Domain.DTO;
 
 namespace BookingSite.Domain.Logic.Managers
 {
     public class RoomManager : IRoomManager
     {
         DataContext _dataContext;
+        IMapper _mapper;
 
-        public RoomManager(DataContext dataContext)
+        public RoomManager(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<IEnumerable<Room>> GetAllAsync()
+        public async Task<IEnumerable<RoomDTO>> GetAllAsync()
         {
-            return await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).ToListAsync();
+            var models = _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel);
+
+            var dto = await _mapper.ProjectTo<RoomDTO>(models).ToListAsync();
+
+            return dto;
         }
 
-        public async Task<Room> GetByIdAsync(int? id)
+        public async Task<RoomDTO> GetByIdAsync(int? id)
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            var room = await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).FirstOrDefaultAsync(h => h.Id == id);
-
-            if (room != null)
-                return room;
+            var model = await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).FirstOrDefaultAsync(h => h.Id == id);
+            if (model != null)
+            {
+                var dto = _mapper.Map<RoomDTO>(model);
+                return dto;
+            }
             throw new Exception("Комната не найдена");
         }
 
-        public async Task AddAsync(Room room)
+        public async Task AddAsync(RoomDTO dto)
         {
-            room = room ?? throw new ArgumentNullException(nameof(room));
+            dto = dto ?? throw new ArgumentNullException(nameof(dto));
 
-            _dataContext.Rooms.Add(room);
+            var model = _mapper.Map<Room>(dto);
+
+            _dataContext.Rooms.Add(model);
 
             await _dataContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(Room room)
+        public async Task UpdateAsync(RoomDTO dto)
         {
-            room = room ?? throw new ArgumentNullException(nameof(room));
+            dto = dto ?? throw new ArgumentNullException(nameof(dto));
 
-            _dataContext.Rooms.Update(room);
+            var model = _mapper.Map<Room>(dto);
+
+            _dataContext.Rooms.Update(model);
 
             await _dataContext.SaveChangesAsync();
         }
@@ -56,16 +70,20 @@ namespace BookingSite.Domain.Logic.Managers
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            var room = await _dataContext.Rooms.AsNoTracking().Include(u => u.Hotel).FirstOrDefaultAsync(h => h.Id == id);
+            var dto = await GetByIdAsync(id);
 
-            if (room != null)
-            {
-                _dataContext.Rooms.Remove(room);
+            await DeleteAsync(dto);
+        }
 
-                await _dataContext.SaveChangesAsync();
-            }
-            else
-                throw new Exception("Комната не найдена");
+        public async Task DeleteAsync(RoomDTO dto)
+        {
+            dto = dto ?? throw new ArgumentNullException(nameof(dto));
+
+            var model = _mapper.Map<Room>(dto);
+
+            _dataContext.Rooms.Remove(model);
+
+            await _dataContext.SaveChangesAsync();
         }
     }
 }

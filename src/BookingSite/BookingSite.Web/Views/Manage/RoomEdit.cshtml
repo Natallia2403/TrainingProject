@@ -33,7 +33,7 @@
         <div>
             <label>Отель:</label>
             <select asp-for="@Model.Room.HotelId">
-                @foreach (Hotel hotel in Model.Hotels)
+                @foreach (var hotel in Model.Hotels)
                 {
                     <option value="@hotel.Id">@hotel.Name</option>
                 }

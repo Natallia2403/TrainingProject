@@ -1,36 +1,36 @@
-﻿@using  BookingSite.Data.Models
+﻿@using  BookingSite.Domain.DTO
 
-@model Room
+@model RoomDTO
 
 @{
     ViewBag.Title = "Добавление Номера (Комнаты)";
 }
 
-    <form method="post">
-        <div>
-            <input type="hidden" asp-for="HotelId" value="@ViewBag.HotelId" />
-        </div>
-        <div>
-            <label>Описание</label>
-            <input type="text" asp-for="Description" />
-        </div>
-        <div>
-            <label>Максимальное количество гостей</label>
-            <input type="number" asp-for="MaxNumberOfGuests" />
-        </div>
-        <div>
-            <label>Цена</label>
-            <input type="number" asp-for="Price" />
-        </div>
-        <div>
-            <label>Балкон</label>
-            <input type="checkbox" asp-for="HasBalcony" />
-        </div>
-        <div>
-            <label>Кухня</label>
-            <input type="checkbox" asp-for="HasKitchen" />
-        </div>
-        <br /><br />
-        <input type="submit" value="Отправить" />
-    </form>
+<form method="post">
+    <div>
+        <input type="hidden" asp-for="HotelId" value="@ViewBag.HotelId" />
+    </div>
+    <div>
+        <label>Описание</label>
+        <input type="text" asp-for="Description" />
+    </div>
+    <div>
+        <label>Максимальное количество гостей</label>
+        <input type="number" asp-for="MaxNumberOfGuests" />
+    </div>
+    <div>
+        <label>Цена</label>
+        <input type="number" asp-for="Price" />
+    </div>
+    <div>
+        <label>Балкон</label>
+        <input type="checkbox" asp-for="HasBalcony" />
+    </div>
+    <div>
+        <label>Кухня</label>
+        <input type="checkbox" asp-for="HasKitchen" />
+    </div>
+    <br /><br />
+    <input type="submit" value="Отправить" />
+</form>
 

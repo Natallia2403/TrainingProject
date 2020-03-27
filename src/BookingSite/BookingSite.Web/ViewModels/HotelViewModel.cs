@@ -9,8 +9,10 @@ namespace BookingSite.Web.ViewModels
 {
     public class HotelViewModel
     {
-        public IEnumerable<Country> Countries { get; set; }
+        //public IEnumerable<Country> Countries { get; set; }//TODO
 
-        public Hotel Hotel { get; set; }
+        public IEnumerable<CountryDTO> Countries { get; set; }
+
+        public HotelDTO Hotel { get; set; }
     }
 }

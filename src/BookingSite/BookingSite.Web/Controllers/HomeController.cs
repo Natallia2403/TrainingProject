@@ -28,25 +28,25 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> IndexAsync()
         {
-            var hotels = await _hotelManager.GetAllAsync();
+            var dto = await _hotelManager.GetAllAsync();
 
-            HomeViewModel hvm = new HomeViewModel { Hotels = hotels };
+            HomeViewModel hvm = new HomeViewModel { Hotels = dto };
 
             return View(hvm);
         }
 
-        public IActionResult HotelDetails(int? id)
+        public async Task<IActionResult> HotelDetailsAsync(int? id)
         {
-            var hotel = _hotelManager.GetByIdAsync(id);
+            var dto = await _hotelManager.GetByIdAsync(id);
 
-            return View(hotel);
+            return View(dto);
         }
 
         public async Task<IActionResult> RoomDetailsAsync(int? id)
         {
-            Room room = await _roomManager.GetByIdAsync(id);
+            var dto = await _roomManager.GetByIdAsync(id);
 
-            return View(room);
+            return View(dto);
         }
     }
 }

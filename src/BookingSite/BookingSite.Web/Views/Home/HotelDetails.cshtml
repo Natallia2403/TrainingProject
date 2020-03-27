@@ -1,6 +1,6 @@
-﻿@using BookingSite.Data.Models
+﻿@using BookingSite.Domain.DTO
 
-@model Hotel
+@model HotelDTO
 @{
     ViewBag.Title = "Описание отеля";
 }
@@ -31,7 +31,7 @@
 <form>
     <table class="table">
 
-        @foreach (Room r in Model.Rooms)
+        @foreach (var r in Model.Rooms)
         {
             <tr>
                 <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>

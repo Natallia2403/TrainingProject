@@ -9,6 +9,6 @@ namespace BookingSite.Domain.Logic.Interfaces
 {
     public interface ICountryManager
     {
-        Task<IEnumerable<Country>> GetAllAsync();
+        Task<IEnumerable<CountryDTO>> GetAllAsync();
     }
 }
