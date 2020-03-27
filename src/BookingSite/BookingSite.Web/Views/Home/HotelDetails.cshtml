@@ -4,7 +4,7 @@
 @{
     ViewBag.Title = "Описание отеля";
 }
-<h2>Описание отеля @Model.Name</h2>
+<h3>Описание отеля @Model.Name</h3>
 <div>
     <dl>
 
@@ -36,7 +36,7 @@
             <tr>
                 <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
                 <td rowspan="2">
-                    <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id">Подробнее</a> 
+                    <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id">Подробнее</a>
                 </td>
             </tr>
             <tr>

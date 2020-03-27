@@ -1,42 +1,33 @@
 ﻿@using BookingSite.Web.ViewModels
 @using BookingSite.Data.Models
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 @model HomeViewModel
 @{
     ViewData["Title"] = "Home Page Booking";
 }
 
-@if (User.Identity.IsAuthenticated)
-{
-    <p>@User.Identity.Name</p>
+    <form class="form-inline">
+        <h2>Управление Отелями и Комнатами</h2>
+        <a asp-action="HotelCreate">Добавить отель</a>
+        <table class="table">
 
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <input type="submit" value="Выход" />
+            @foreach (var h in Model.Hotels)
+            {
+                <tr>
+                    <td>@h.Name</td>
+                    <td>
+                        <a asp-action="HotelDetails" asp-controller="Manage" asp-route-id="@h.Id">Подробнее</a> |
+                        <a asp-action="HotelEdit" asp-controller="Manage" asp-route-id="@h.Id">Изменить</a> |
+                        <a asp-action="HotelDelete" asp-controller="Manage" asp-route-id="@h.Id" onclick="javascript:return confirm('Вы действительно хотите удалить данный отель?')">Удалить</a>
+                    </td>
+                </tr>
+            }
+        </table>
     </form>
-}
-else
-{
-    <a asp-controller="Account" asp-action="Login">Вход</a>
-    <a asp-controller="Account" asp-action="Register">Регистрация</a>
-}
-
-<form class="form-inline">
-    <a asp-action="HotelCreate">Добавить отель</a>
-    <table class="table">
-
-        @foreach (var h in Model.Hotels)
-        {
-            <tr>
-                <td>@h.Name</td>
-                <td>
-                    <a asp-action="HotelDetails" asp-controller="Manage" asp-route-id="@h.Id">Подробнее</a> |
-                    <a asp-action="HotelEdit" asp-controller="Manage" asp-route-id="@h.Id">Изменить</a> |
-                    <a asp-action="HotelDelete" asp-controller="Manage" asp-route-id="@h.Id" onclick="javascript:return confirm('Вы действительно хотите удалить данный отель?')">Удалить</a>
-                </td>
-            </tr>
-        }
-    </table>
-</form>
 
 
 

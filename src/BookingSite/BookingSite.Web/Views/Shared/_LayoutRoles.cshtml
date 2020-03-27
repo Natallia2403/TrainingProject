@@ -1,0 +1,26 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+
+</head>
+<body>
+    <h2>Управление Ролями</h2>
+
+    <!--основной контент-->
+    <div class="container body-content">
+        @RenderBody()
+    </div>
+    <hr />
+    <footer>
+        <a href="~/Roles/Index">Вернуться на главную страницу управления Ролями</a>
+    </footer>
+</body>
+</html>

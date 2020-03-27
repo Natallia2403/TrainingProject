@@ -1,24 +1,16 @@
 ﻿@using BookingSite.Web.ViewModels
 @using BookingSite.Data.Models
 
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
 @model HomeViewModel
 @{
     ViewData["Title"] = "Home Page Booking";
 }
 
-@if (User.Identity.IsAuthenticated)
-{
-    <p>@User.Identity.Name</p>
 
-    <form method="post" asp-controller="Account" asp-action="Logout">
-        <input type="submit" value="Выход" />
-    </form>
-}
-else
-{
-    <a asp-controller="Account" asp-action="Login">Вход</a>
-    <a asp-controller="Account" asp-action="Register">Регистрация</a>
-}
 
 <form class="form-inline">
     <table class="table">
@@ -28,12 +20,13 @@ else
             <tr>
                 <td>@h.Name</td>
                 <td>
-                    <a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id">Подробнее</a> 
+                    <a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id">Подробнее</a>
                 </td>
             </tr>
         }
     </table>
 </form>
+
 
 
 
