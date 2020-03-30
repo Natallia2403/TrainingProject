@@ -2,20 +2,28 @@
 @{
     ViewBag.Title = "Редактирование пользователя";
 }
-<form asp-action="Edit" asp-controller="Users">
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div>
-        <input type="hidden" asp-for="Id" />
-    </div>
-    <div>
-        <label asp-for="Email">Email</label>
-        <input type="text" asp-for="Email" />
-    </div>
-    <div>
-        <label asp-for="Year">Год рождения</label>
-        <input type="number" asp-for="Year" />
-    </div>
-    <div>
-        <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
-    </div>
-</form>
+    <form asp-action="Edit" asp-controller="Users">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div>
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div>
+            <label asp-for="Email">Email</label>
+            <input type="text" asp-for="Email" />
+        </div>
+        <div>
+            <label asp-for="Year">Год рождения</label>
+            <input type="number" asp-for="Year" />
+        </div>
+        <div>
+            <label asp-for="FirstName">Имя</label>
+            <input type="text" asp-for="FirstName" />
+        </div>
+        <div>
+            <label asp-for="LastName">Фамилия</label>
+            <input type="text" asp-for="LastName" />
+        </div>
+        <div>
+            <input type="submit" value="Сохранить" class="btn btn-outline-secondary" />
+        </div>
+    </form>

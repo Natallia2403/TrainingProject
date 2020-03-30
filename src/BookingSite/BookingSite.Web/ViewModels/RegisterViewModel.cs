@@ -26,5 +26,14 @@ namespace BookingSite.Web.ViewModels
         [Required]
         [Display(Name = "Год рождения")]
         public int Year { get; set; }
+
+        [Required]
+        [Display(Name = "Имя")]
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Фамилия")]
+        public string LastName { get; set; }
+
     }
 }

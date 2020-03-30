@@ -12,8 +12,6 @@ namespace BookingSite.Data
     {
         public DbSet<Booking> Bookings { get; set; }
 
-        public DbSet<Client> Clients { get; set; }
-
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Gallery> Galleries { get; set; }
@@ -27,7 +25,7 @@ namespace BookingSite.Data
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
         {
-            Database.Migrate();
+            Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,8 +33,6 @@ namespace BookingSite.Data
             modelBuilder = modelBuilder ?? throw new ArgumentNullException(nameof(modelBuilder));
 
             modelBuilder.ApplyConfiguration(new BookingConfiguration());
-
-            modelBuilder.ApplyConfiguration(new ClientConfiguration());
 
             modelBuilder.ApplyConfiguration(new EventLogConfiguration());
 

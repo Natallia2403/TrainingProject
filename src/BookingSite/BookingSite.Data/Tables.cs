@@ -8,8 +8,6 @@ namespace BookingSite.Data
     {
         public static readonly string Booking = nameof(Booking);
 
-        public static readonly string Client = nameof(Client);
-
         public static readonly string Country = nameof(Country);
 
         public static readonly string EventLog = nameof(EventLog);

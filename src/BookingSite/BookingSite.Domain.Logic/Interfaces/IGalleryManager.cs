@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BookingSite.Domain.Logic.Interfaces
 {
-    public class IGalleryManager
+    public interface IGalleryManager
     {
     }
 }

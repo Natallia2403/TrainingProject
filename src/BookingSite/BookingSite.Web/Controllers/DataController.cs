@@ -51,16 +51,6 @@ namespace BookingSite.Web.Controllers
             _dataContext.Countries.Add(country5);
             _dataContext.Countries.Add(country6);
 
-            //Clients
-            Client client1 = new Client { FirstName = "Иван", LastName = "Иванов", Login = "ivan", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country1 };
-            Client client2 = new Client { FirstName = "Пётр", LastName = "Петров", Login = "petr", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country2 };
-            Client client3 = new Client { FirstName = "Сидор", LastName = "Сидоров", Login = "sidor", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country3 };
-            Client client4 = new Client { FirstName = "Наталия", LastName = "Ключникова", Login = "natalia", Password = "123", Email = "n.kliuchnikova@sam-solutions.com", Country = country4 };
-
-            _dataContext.Clients.Add(client1);
-            _dataContext.Clients.Add(client2);
-            _dataContext.Clients.Add(client3);
-
             //Hotels
             Hotel hotel1 = new Hotel { Name = "Парус", Country = country1, Stars = 3, IsAppartment = false };
             Hotel hotel2 = new Hotel { Name = "Олимп", Country = country2, Stars = 3, IsAppartment = false };

@@ -8,5 +8,11 @@ namespace BookingSite.Data.Models
     public class User : IdentityUser
     {
         public int Year { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public List<Booking> Bookings { get; set; }
     }
 }

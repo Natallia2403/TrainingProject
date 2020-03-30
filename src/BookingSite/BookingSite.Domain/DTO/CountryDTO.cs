@@ -10,8 +10,6 @@ namespace BookingSite.Domain.DTO
 
         public string Name { get; set; }
 
-        public List<ClientDTO> Clients { get; set; }
-
         public List<HotelDTO> Hotels { get; set; }
     }
 }

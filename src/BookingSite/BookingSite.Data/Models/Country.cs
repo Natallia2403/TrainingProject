@@ -10,8 +10,6 @@ namespace BookingSite.Data.Models
 
         public string Name { get; set; }
 
-        public List<Client> Clients { get; set; }
-
         public List<Hotel> Hotels { get; set; }
     }
 }

@@ -12,8 +12,6 @@ namespace BookingSite.Data
     {
         DbSet<Booking> Bookings { get; set; }
 
-        DbSet<Client> Clients { get; set; }
-
         DbSet<Country> Countries { get; set; }
 
         DbSet<Gallery> Galleries { get; set; }

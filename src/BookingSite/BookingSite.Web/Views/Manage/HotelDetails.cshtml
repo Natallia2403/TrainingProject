@@ -30,6 +30,7 @@
 
 <form>
     <a href="~/Manage/RoomCreate?hotelId=@Model.Id">Добавить комнату</a>
+    <a asp-controller="Manage" asp-action="RoomCreate" asp-route-hotelId="@Model.Id">Добавить комнату</a>
     <table class="table">
 
         @foreach (var r in Model.Rooms)

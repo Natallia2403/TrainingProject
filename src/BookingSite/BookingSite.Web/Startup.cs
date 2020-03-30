@@ -51,6 +51,7 @@ namespace BookingSite.Web
             services.AddScoped<IHotelManager, HotelManager>();
             services.AddScoped<ICountryManager, CountryManager>();
             services.AddScoped<IRoomManager, RoomManager>();
+            services.AddScoped<IBookingManager, BookingManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

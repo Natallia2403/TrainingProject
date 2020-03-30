@@ -8,9 +8,7 @@ namespace BookingSite.Domain.DTO
     {
         public int Id { get; set; }
         
-        public int ClientId { get; set; }
-
-        public ClientDTO Client { get; set; }
+        public int UserId { get; set; }
 
         public int RoomId { get; set; }
 
@@ -19,8 +17,6 @@ namespace BookingSite.Domain.DTO
         public DateTime DateFrom { get; set; }
 
         public DateTime DateTo { get; set; }
-
-        public int NumberOfGuests { get; set; }
 
         public List<PaymentDTO> Payments { get; set; }
     }

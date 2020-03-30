@@ -8,9 +8,9 @@ namespace BookingSite.Data.Models
     {
         public int Id { get; set; }
         
-        public int ClientId { get; set; }
+        public int UserId { get; set; }
 
-        public Client Client { get; set; }
+        public User User { get; set; }
 
         public int RoomId { get; set; }
 
@@ -19,8 +19,6 @@ namespace BookingSite.Data.Models
         public DateTime DateFrom { get; set; }
 
         public DateTime DateTo { get; set; }
-
-        public int NumberOfGuests { get; set; }
 
         public List<Payment> Payments { get; set; }
     }
