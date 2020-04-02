@@ -33,6 +33,11 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var dto = await _hotelManager.GetAllAsync();
 
             HomeViewModel hvm = new HomeViewModel { Hotels = dto };

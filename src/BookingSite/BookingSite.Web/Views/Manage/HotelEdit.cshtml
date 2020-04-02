@@ -1,13 +1,14 @@
 ﻿@using  BookingSite.Web.ViewModels
 @using  BookingSite.Data.Models
+@using BookingSite.Common.Enums;
 
 @model HotelViewModel
 @{
     ViewBag.Title = "Редактирование отеля ";
 }
-    <h3>Редактирование отеля @Model.Hotel.Name</h3>
+<h3>Редактирование отеля @Model.Hotel.Name</h3>
 
-<form method="post">
+<form asp-controller="Manage" asp-action="HotelEdit">
     <div style="visibility:hidden;">
         <input type="number" asp-for="@Model.Hotel.Id" />
     </div>
@@ -24,8 +25,8 @@
         <input type="text" asp-for="@Model.Hotel.Address" />
     </div>
     <div>
-        <label asp-for="@Model.Hotel.Stars">Класс отеля</label>
-        <input type="number" asp-for="@Model.Hotel.Stars" />
+        <label asp-for="@Model.Hotel.Stars">Класс отеля (кол-во звёзд)</label>
+        <select asp-for="@Model.Hotel.Stars" asp-items="Html.GetEnumSelectList<Stars>()"></select>
     </div>
     <div>
         <label asp-for="@Model.Hotel.IsAppartment">Аппартаменты</label>
@@ -41,6 +42,6 @@
         </select>
     </div>
     <div>
-        <input type="submit" value="Сохранить" class="btn btn-default" />
+        <input type="submit" value="Сохранить" />
     </div>
 </form>

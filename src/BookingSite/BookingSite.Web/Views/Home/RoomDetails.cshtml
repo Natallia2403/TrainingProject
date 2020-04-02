@@ -4,25 +4,9 @@
 @{
     ViewBag.Title = "Описание отеля";
 }
-<h3>Описание комнаты @Model.Description</h3>
-<div>
-    <dl>
 
-        <dt>Отель</dt>
-        <dd>@Model.Hotel.Name</dd>
-
-        <dt>Максимальное число гостей</dt>
-        <dd>@Model.MaxNumberOfGuests</dd>
-
-        <dt>Цена</dt>
-        <dd>@Model.Price</dd>
-
-        <dt>Балкон</dt>
-        <dd>@Model.HasBalcony</dd>
-
-        <dt>Кухня</dt>
-        <dd>@Model.HasKitchen</dd>
-    </dl>
-    <br /><br />
-    <a asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id">Забронировать</a>
-</div>
+    <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id">
+        @await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
+        <br /><br />
+        <input type="submit" value="Забронировать" />
+    </form>

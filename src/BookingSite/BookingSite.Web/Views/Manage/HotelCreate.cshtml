@@ -1,5 +1,6 @@
 ﻿@using  BookingSite.Web.ViewModels
 @using  BookingSite.Data.Models
+@using BookingSite.Common.Enums
 
 @model HotelViewModel
 
@@ -31,7 +32,7 @@
     </div>
     <div>
         <label>Звёзды</label>
-        <input type="number" asp-for="@Model.Hotel.Stars" />
+        <select asp-for="@Model.Hotel.Stars" asp-items="Html.GetEnumSelectList<Stars>()"></select>
     </div>
     <div>
         <label>Аппартаменты</label>

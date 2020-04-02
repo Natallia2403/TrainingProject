@@ -39,7 +39,7 @@ namespace BookingSite.Web
             services.AddOpenApiDocument();
             services.AddControllers();
             //services.AddAutoMapper(typeof(Startup).Assembly);
-            services.AddAutoMapper(Assembly.Load("BookingSite.Data"));
+            services.AddAutoMapper(Assembly.Load("BookingSite.Domain"));
 
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookingSiteConnectionString"))
                                                        .EnableSensitiveDataLogging());

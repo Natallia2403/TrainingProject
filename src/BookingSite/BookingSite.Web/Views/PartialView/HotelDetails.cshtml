@@ -1,0 +1,29 @@
+﻿@using BookingSite.Domain.DTO
+
+@model HotelDTO
+@{
+    ViewBag.Title = "Описание отеля";
+}
+<h3>Описание отеля @Model.Name</h3>
+<div>
+    <dl>
+
+        <dt>Страна</dt>
+        <dd>@Model.Country.Name</dd>
+
+        <dt>Название</dt>
+        <dd>@Model.Name</dd>
+
+        <dt>Описание</dt>
+        <dd>@Model.Description</dd>
+
+        <dt>Адрес</dt>
+        <dd>@Model.Address</dd>
+
+        <dt>Класс отеля</dt>
+        <dd>@Model.Stars</dd>
+
+        <dt>Аппартаменты</dt>
+        <dd>@Model.IsAppartment</dd>
+    </dl>
+</div>

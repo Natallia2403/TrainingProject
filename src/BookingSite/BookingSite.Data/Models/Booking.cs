@@ -8,9 +8,7 @@ namespace BookingSite.Data.Models
     {
         public int Id { get; set; }
         
-        public int UserId { get; set; }
-
-        public User User { get; set; }
+        public string UserName { get; set; }
 
         public int RoomId { get; set; }
 

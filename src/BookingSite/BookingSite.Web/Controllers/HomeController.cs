@@ -20,17 +20,14 @@ namespace BookingSite.Web.Controllers
         IHotelManager _hotelManager;
         IRoomManager _roomManager;
         IBookingManager _bookingManager;
-        UserManager<User> _userManager;
 
         public HomeController(ILogger<HomeController> logger,
-                                 IHotelManager hotelManager, IRoomManager roomManager, IBookingManager bookingManager,
-                                 UserManager<User> userManager)
+                                 IHotelManager hotelManager, IRoomManager roomManager, IBookingManager bookingManager)
         {
             _logger = logger;
             _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
             _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
             _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
-            _userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
@@ -57,14 +54,17 @@ namespace BookingSite.Web.Controllers
             return View(dto);
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Book(int? id)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
             var userName = HttpContext.User.Identity.Name;
 
-            var user = _userManager.FindByNameAsync(userName);
-
-            var dto = new BookingDTO { RoomId = id.Value, UserId = user.Id };
+            var dto = new BookingDTO { RoomId = id.Value, UserName = userName };
 
             await _bookingManager.AddAsync(dto);
 

@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\BookingSite.Common\BookingSite.Common.csproj" />
       <ProjectReference Include="..\BookingSite.Data\BookingSite.Data.csproj" />
       <ProjectReference Include="..\BookingSite.Domain.Logic\BookingSite.Domain.Logic.csproj" />
       <ProjectReference Include="..\BookingSite.Domain\BookingSite.Domain.csproj" />
