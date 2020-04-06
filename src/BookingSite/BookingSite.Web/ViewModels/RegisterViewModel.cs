@@ -23,15 +23,12 @@ namespace BookingSite.Web.ViewModels
         [Display(Name = "Подтвердить пароль")]
         public string PasswordConfirm { get; set; }
 
-        [Required]
         [Display(Name = "Год рождения")]
-        public int Year { get; set; }
+        public int? Year { get; set; }
 
-        [Required]
         [Display(Name = "Имя")]
         public string FirstName { get; set; }
 
-        [Required]
         [Display(Name = "Фамилия")]
         public string LastName { get; set; }
 

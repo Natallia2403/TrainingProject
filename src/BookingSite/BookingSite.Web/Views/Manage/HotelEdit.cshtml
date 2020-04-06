@@ -4,44 +4,48 @@
 
 @model HotelViewModel
 @{
-    ViewBag.Title = "Редактирование отеля ";
+    ViewData["Title"] = "Редактирование отеля ";
 }
-<h3>Редактирование отеля @Model.Hotel.Name</h3>
 
-<form asp-controller="Manage" asp-action="HotelEdit">
-    <div style="visibility:hidden;">
-        <input type="number" asp-for="@Model.Hotel.Id" />
-    </div>
-    <div>
-        <label asp-for="@Model.Hotel.Name">Название</label>
-        <input type="text" asp-for="@Model.Hotel.Name" />
-    </div>
-    <div>
-        <label asp-for="@Model.Hotel.Description">Описание</label>
-        <input type="text" asp-for="@Model.Hotel.Description" />
-    </div>
-    <div>
-        <label asp-for="@Model.Hotel.Address">Адрес</label>
-        <input type="text" asp-for="@Model.Hotel.Address" />
-    </div>
-    <div>
-        <label asp-for="@Model.Hotel.Stars">Класс отеля (кол-во звёзд)</label>
-        <select asp-for="@Model.Hotel.Stars" asp-items="Html.GetEnumSelectList<Stars>()"></select>
-    </div>
-    <div>
-        <label asp-for="@Model.Hotel.IsAppartment">Аппартаменты</label>
-        <input type="checkbox" asp-for="@Model.Hotel.IsAppartment" />
-    </div>
-    <div>
-        <label>Страна:</label>
-        <select asp-for="@Model.Hotel.CountryId">
-            @foreach (var country in Model.Countries)
-            {
-                <option value="@country.Id">@country.Name</option>
-            }
-        </select>
-    </div>
-    <div>
-        <input type="submit" value="Сохранить" />
-    </div>
-</form>
+    <form asp-controller="Manage" asp-action="HotelEdit">
+        <h3>Редактирование отеля @Model.Name</h3>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div style="visibility:hidden;">
+            <input type="number" asp-for="@Model.Id" />
+        </div>
+        <div>
+            <label asp-for="@Model.Name">Название</label>
+            <input type="text" asp-for="@Model.Name" />
+            <span asp-validation-for="@Model.Name"></span>
+        </div>
+        <div>
+            <label asp-for="@Model.Description">Описание</label>
+            <input type="text" asp-for="@Model.Description" />
+            <span asp-validation-for="@Model.Description"></span>
+        </div>
+        <div>
+            <label asp-for="@Model.Address">Адрес</label>
+            <input type="text" asp-for="@Model.Address" />
+            <span asp-validation-for="@Model.Address"></span>
+        </div>
+        <div>
+            <label asp-for="@Model.Stars">Класс отеля (кол-во звёзд)</label>
+            <select asp-for="@Model.Stars" asp-items="Html.GetEnumSelectList<Stars>()"></select>
+        </div>
+        <div>
+            <label asp-for="@Model.IsAppartment">Аппартаменты</label>
+            <input type="checkbox" asp-for="@Model.IsAppartment" />
+        </div>
+        <div>
+            <label>Страна:</label>
+            <select asp-for="@Model.CountryId">
+                @foreach (var country in Model.Countries)
+                {
+                    <option value="@country.Id">@country.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Сохранить" />
+        </div>
+    </form>

@@ -2,7 +2,7 @@
 
 @model RoomDTO
 @{
-    ViewBag.Title = "Описание отеля";
+    ViewData["Title"] = "Описание отеля";
 }
 
     <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id">

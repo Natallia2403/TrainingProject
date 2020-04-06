@@ -5,40 +5,45 @@
 @model HotelViewModel
 
 @{
-    ViewBag.Title = "Добавление Отеля";
+    ViewData["Title"] = "Добавление Отеля";
 }
-<h3>Добавление отеля</h3>
-<form method="post">
-    <div>
-        <label>Страна:</label>
-        <select asp-for="@Model.Hotel.CountryId">
-            @foreach (var country in Model.Countries)
-            {
-                <option value="@country.Id">@country.Name</option>
-            }
-        </select>
-    </div>
-    <div>
-        <label>Имя</label>
-        <input type="text" asp-for="@Model.Hotel.Name" />
-    </div>
-    <div>
-        <label>Описание</label>
-        <input type="text" asp-for="@Model.Hotel.Description" />
-    </div>
-    <div>
-        <label>Адрес</label>
-        <input type="text" asp-for="@Model.Hotel.Address" />
-    </div>
-    <div>
-        <label>Звёзды</label>
-        <select asp-for="@Model.Hotel.Stars" asp-items="Html.GetEnumSelectList<Stars>()"></select>
-    </div>
-    <div>
-        <label>Аппартаменты</label>
-        <input type="checkbox" asp-for="@Model.Hotel.IsAppartment" />
-    </div>
-    <br /><br />
-    <input type="submit" value="Отправить" />
-</form>
+
+    <form method="post">
+        <h3>Добавление отеля</h3>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <label>Страна:</label>
+            <select asp-for="@Model.CountryId">
+                @foreach (var country in Model.Countries)
+                {
+                    <option value="@country.Id">@country.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <label>Имя</label>
+            <input type="text" asp-for="@Model.Name" />
+            <span asp-validation-for="@Model.Name"></span>
+        </div>
+        <div>
+            <label>Описание</label>
+            <input type="text" asp-for="@Model.Description" />
+            <span asp-validation-for="@Model.Description"></span>
+        </div>
+        <div>
+            <label>Адрес</label>
+            <input type="text" asp-for="@Model.Address" />
+            <span asp-validation-for="@Model.Address"></span>
+        </div>
+        <div>
+            <label>Звёзды</label>
+            <select asp-for="@Model.Stars" asp-items="Html.GetEnumSelectList<Stars>()"></select>
+        </div>
+        <div>
+            <label>Аппартаменты</label>
+            <input type="checkbox" asp-for="@Model.IsAppartment" />
+        </div>
+        <br /><br />
+        <input type="submit" value="Отправить" />
+    </form>
 
