@@ -1,12 +1,13 @@
 ﻿@model BookingSite.Web.ViewModels.CreateUserViewModel
 @{
-    ViewBag.Title = "Добавление пользователя";
+    ViewData["Title"] = "Добавление пользователя";
 }
     <form asp-action="Create" asp-controller="Users">
-        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
         <div>
-            <label asp-for="Email">Email</label>
-            <input type="text" asp-for="Email" />
+            <label asp-for="Email">Имя (Email)</label>
+            <input type="text" asp-for="Email"/>
+            <span asp-validation-for="Email"></span>
         </div>
         <div>
             <label asp-for="Password">Пароль</label>
@@ -14,7 +15,7 @@
         </div>
         <div>
             <label asp-for="Year">Год рождения</label>
-            <input type="number" asp-for="Year" />
+            <input asp-for="Year" />
         </div>
         <div>
             <label asp-for="FirstName">Имя</label>
@@ -25,6 +26,6 @@
             <input type="text" asp-for="LastName" />
         </div>
         <div>
-            <input type="submit" value="Добавить" class="btn btn-outline-secondary" />
+            <input type="submit" value="Добавить" />
         </div>
     </form>

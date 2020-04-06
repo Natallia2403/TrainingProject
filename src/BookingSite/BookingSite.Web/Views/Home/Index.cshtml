@@ -1,10 +1,6 @@
 ﻿@using BookingSite.Web.ViewModels
 @using BookingSite.Data.Models
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
 @model HomeViewModel
 @{
     ViewData["Title"] = "Home Page Booking";
@@ -12,8 +8,8 @@
 
 
 
-<form class="form-inline">
-    <table class="table">
+<form>
+    <table>
 
         @foreach (var h in Model.Hotels)
         {

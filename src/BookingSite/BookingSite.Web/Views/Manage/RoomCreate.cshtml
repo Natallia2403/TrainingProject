@@ -1,36 +1,42 @@
-﻿@using  BookingSite.Domain.DTO
+﻿@using  BookingSite.Web.ViewModels
+@using  BookingSite.Domain.DTO
 
-@model RoomDTO
+@model RoomViewModel
 
 @{
-    ViewBag.Title = "Добавление Номера (Комнаты)";
+    ViewData["Title"] = "Добавление Номера (Комнаты)";
 }
-<h3>Добавление комнаты</h3>
-<form method="post">
-    <div>
-        <input type="hidden" asp-for="HotelId" value="@ViewBag.HotelId" />
-    </div>
-    <div>
-        <label>Описание</label>
-        <input type="text" asp-for="Description" />
-    </div>
-    <div>
-        <label>Максимальное количество гостей</label>
-        <input type="number" asp-for="MaxNumberOfGuests" />
-    </div>
-    <div>
-        <label>Цена</label>
-        <input type="number" asp-for="Price" />
-    </div>
-    <div>
-        <label>Балкон</label>
-        <input type="checkbox" asp-for="HasBalcony" />
-    </div>
-    <div>
-        <label>Кухня</label>
-        <input type="checkbox" asp-for="HasKitchen" />
-    </div>
-    <br /><br />
-    <input type="submit" value="Отправить" />
-</form>
+
+    <form method="post">
+        <h3>Добавление комнаты</h3>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div>
+            <input type="hidden" asp-for="@Model.HotelId" value="@ViewBag.HotelId" />
+        </div>
+        <div>
+            <label>Описание</label>
+            <input type="text" asp-for="@Model.Description" />
+            <span asp-validation-for="@Model.Description"></span>
+        </div>
+        <div>
+            <label>Максимальное количество гостей</label>
+            <input type="number" asp-for="@Model.MaxNumberOfGuests" />
+            <span asp-validation-for="@Model.MaxNumberOfGuests"></span>
+        </div>
+        <div>
+            <label>Цена</label>
+            <input type="number" asp-for="@Model.Price" />
+            <span asp-validation-for="@Model.Price"></span>
+        </div>
+        <div>
+            <label>Балкон</label>
+            <input type="checkbox" asp-for="@Model.HasBalcony" />
+        </div>
+        <div>
+            <label>Кухня</label>
+            <input type="checkbox" asp-for="@Model.HasKitchen" />
+        </div>
+        <br /><br />
+        <input type="submit" value="Отправить" />
+    </form>
 

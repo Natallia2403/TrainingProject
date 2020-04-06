@@ -1,19 +1,14 @@
 ﻿@using BookingSite.Web.ViewModels
 @using BookingSite.Data.Models
 
-@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
 @model HomeViewModel
 @{
     ViewData["Title"] = "Home Page Booking";
 }
 
-    <form class="form-inline">
-        <h2>Управление Отелями и Комнатами</h2>
+    <form>
         <a asp-action="HotelCreate">Добавить отель</a>
-        <table class="table">
+        <table>
 
             @foreach (var h in Model.Hotels)
             {

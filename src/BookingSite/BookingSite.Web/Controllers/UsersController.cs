@@ -27,7 +27,7 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year, FirstName = model.FirstName, LastName = model.LastName };
+                User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year.Value, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -65,7 +65,7 @@ namespace BookingSite.Web.Controllers
                 {
                     user.Email = model.Email;
                     user.UserName = model.Email;
-                    user.Year = model.Year;
+                    user.Year = model.Year.Value;
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
 
@@ -83,6 +83,7 @@ namespace BookingSite.Web.Controllers
                     }
                 }
             }
+
             return View(model);
         }
 
