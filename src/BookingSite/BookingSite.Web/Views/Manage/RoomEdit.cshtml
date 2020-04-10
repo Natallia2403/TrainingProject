@@ -3,44 +3,49 @@
 
 @model RoomViewModel
 @{
-    ViewBag.Title = "Редактирование комнаты ";
+    ViewData["Title"] = "Редактирование комнаты ";
 }
-    <h3>Редактирование комнаты @Model.Room.Description</h3>
+    
 
-<form method="post">
-    <div style="visibility:hidden;">
-        <input type="number" asp-for="@Model.Room.Id" />
-    </div>
-    <div>
-        <label>Описание</label>
-        <input type="text" asp-for="@Model.Room.Description" />
-    </div>
-    <div>
-        <label>Максимальное количество гостей</label>
-        <input type="number" asp-for="@Model.Room.MaxNumberOfGuests" />
-    </div>
-    <div>
-        <label>Цена</label>
-        <input type="number" asp-for="@Model.Room.Price" />
-    </div>
-    <div>
-        <label>Балкон</label>
-        <input type="checkbox" asp-for="@Model.Room.HasBalcony" />
-    </div>
-    <div>
-        <label>Кухня</label>
-        <input type="checkbox" asp-for="@Model.Room.HasKitchen" />
-    </div>
-    <div>
-        <label>Отель:</label>
-        <select asp-for="@Model.Room.HotelId">
-            @foreach (var hotel in Model.Hotels)
-            {
-                <option value="@hotel.Id">@hotel.Name</option>
-            }
-        </select>
-    </div>
-    <div>
-        <input type="submit" value="Сохранить" />
-    </div>
-</form>
+    <form method="post">
+        <h3>Редактирование комнаты @Model.Description</h3>
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div style="visibility:hidden;">
+            <input type="number" asp-for="@Model.Id" />
+        </div>
+        <div>
+            <label>Описание</label>
+            <input type="text" asp-for="@Model.Description" />
+            <span asp-validation-for="@Model.Description"></span>
+        </div>
+        <div>
+            <label>Максимальное количество гостей</label>
+            <input type="number" asp-for="@Model.MaxNumberOfGuests" />
+            <span asp-validation-for="@Model.MaxNumberOfGuests"></span>
+        </div>
+        <div>
+            <label>Цена</label>
+            <input type="number" asp-for="@Model.Price" />
+            <span asp-validation-for="@Model.Price"></span>
+        </div>
+        <div>
+            <label>Балкон</label>
+            <input type="checkbox" asp-for="@Model.HasBalcony" />
+        </div>
+        <div>
+            <label>Кухня</label>
+            <input type="checkbox" asp-for="@Model.HasKitchen" />
+        </div>
+        <div>
+            <label>Отель:</label>
+            <select asp-for="@Model.HotelId">
+                @foreach (var hotel in Model.Hotels)
+                {
+                    <option value="@hotel.Id">@hotel.Name</option>
+                }
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Сохранить" />
+        </div>
+    </form>

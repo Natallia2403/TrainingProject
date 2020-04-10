@@ -1,21 +1,22 @@
-﻿@await Html.PartialAsync("~/Views/PartialView/HotelDetails.cshtml")
+﻿
 
-<form>
-    <table class="table">
+    <form>
+        @await Html.PartialAsync("~/Views/PartialView/HotelDetails.cshtml")
+        <table>
 
-        @foreach (var r in Model.Rooms)
-        {
-            <tr>
-                <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
-                <td rowspan="2">
-                    <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id">Подробнее</a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Цена: @r.Price
-                </td>
-            </tr>
-        }
-    </table>
-</form>
+            @foreach (var r in Model.Rooms)
+            {
+                <tr>
+                    <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
+                    <td rowspan="2">
+                        <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id">Подробнее</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Цена: @r.Price
+                    </td>
+                </tr>
+            }
+        </table>
+    </form>

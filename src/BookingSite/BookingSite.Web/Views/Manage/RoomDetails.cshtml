@@ -2,6 +2,9 @@
 
 @model RoomDTO
 @{
-    ViewBag.Title = "Описание комнаты ";
+    ViewData["Title"] = "Описание комнаты ";
 }
-@await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
+
+    <form>
+        @await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
+        </form>
