@@ -10,13 +10,15 @@ namespace BookingSite.Web.ViewModels
 {
     public class FilterViewModel
     {
-        public FilterViewModel(List<CountryDTO> countries, int? country, string name)
+        public FilterViewModel(List<CountryDTO> countries, int? country, string name, DateTime dateFrom, DateTime dateTo)
         {
             // устанавливаем начальный элемент, который позволит выбрать всех
             countries.Insert(0, new CountryDTO { Name = "Все", Id = 0 });
             Countries = new SelectList(countries, "Id", "Name", country);
             SelectedCountry = country;
             SelectedName = name;
+            SelectedDateFrom = dateFrom;
+            SelectedDateTo = dateTo;
         }
 
         public SelectList Countries { get; private set; } 
@@ -24,5 +26,11 @@ namespace BookingSite.Web.ViewModels
         public int? SelectedCountry { get; private set; }  
 
         public string SelectedName { get; private set; }
+
+        [Required]
+        public DateTime SelectedDateFrom { get; private set; }
+
+        [Required]
+        public DateTime SelectedDateTo { get; private set; }
     }
 }

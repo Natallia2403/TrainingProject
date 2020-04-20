@@ -5,8 +5,15 @@
     ViewData["Title"] = "Описание отеля";
 }
 
-    <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id">
+    <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo">
         @await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
         <br /><br />
-        <input type="submit" value="Забронировать" />
+        @if (ViewBag.IsCanBeBooked)
+        {
+            <input type="submit" value="Забронировать" />
+        }
+        else
+        {
+            <label>На эти даты комната недоступна</label>
+        }
     </form>

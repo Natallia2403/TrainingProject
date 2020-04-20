@@ -24,6 +24,8 @@ namespace BookingSite.Domain.DTO
 
         public bool HasKitchen { get; set; }
 
+        public bool IsCanBeBooked { get; set; }
+
         public int HotelId { get; set; }
 
         public HotelDTO Hotel { get; set; }
