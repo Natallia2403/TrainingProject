@@ -43,6 +43,11 @@ namespace CustomIdentityApp.Controllers
                     }
                 }
             }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Название не должно быть пустым");
+            }
+
             return View(name);
         }
 

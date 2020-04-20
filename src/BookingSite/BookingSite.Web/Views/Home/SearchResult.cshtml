@@ -1,0 +1,73 @@
+﻿@using BookingSite.Web.ViewModels
+@using BookingSite.Data.Models
+
+@model HomeViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewData["Title"] = "Список пользователей";
+}
+
+<form method="get">
+    <div class="form-inline form-group">
+        <label class="control-label">Имя: </label>
+        <input name="name" class="form-control" />
+
+        <label class="control-label">Страна: </label>
+        <select name="country" asp-items="Model.FilterViewModel.Countries" class="form-control"></select>
+
+        <label class="control-label">Дата с: </label>
+        <input name="datefrom" class="form-control" />
+
+        <label class="control-label">Дата по: </label>
+        <input name="dateto" class="form-control" />
+
+        <input type="submit" value="Фильтр" class="btn btn-default" />
+    </div>
+</form>
+
+
+<table class="table">
+    <tr>
+        <th>
+            <a asp-action="Index"
+               asp-route-sortOrder="@(Model.SortViewModel.NameSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Имя</a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.StarsSort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Возраст</a>
+        </th>
+        <th>
+            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CountrySort)"
+               asp-route-name="@(Model.FilterViewModel.SelectedName)"
+               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Компания</a>
+        </th>
+    </tr>
+    @foreach (var h in Model.Hotels)
+    {
+        <tr>
+            <td><a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id" asp-route-datefrom="@(Model.FilterViewModel.SelectedDateFrom)" asp-route-dateto="@(Model.FilterViewModel.SelectedDateTo)">@h.Name</a></td>
+            <td>@h.Stars</td>
+            <td>@h.Country.Name</td>
+        </tr>
+    }
+</table>
+<br />
+<br />
+<page-link page-model="Model.PageViewModel" page-action="Index"
+           page-url-name="@(Model.FilterViewModel.SelectedName)"
+           page-url-company="@(Model.FilterViewModel.SelectedCountry)"
+           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>
+
+
+
+
+
+
+

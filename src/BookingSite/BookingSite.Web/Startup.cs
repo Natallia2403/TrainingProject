@@ -19,6 +19,7 @@ using BookingSite.Domain.Logic;
 using BookingSite.Domain.Logic.Interfaces;
 using BookingSite.Domain.Logic.Managers;
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
 
 namespace BookingSite.Web
 {
@@ -57,12 +58,27 @@ namespace BookingSite.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //env.EnvironmentName = "Production";
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseOpenApi().UseSwaggerUi3();
             }
 
+            // обработка ошибок HTTP
+            var errorActionPath = $"/Error/HandleError";
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseExceptionHandler(errorActionPath);
+            }
+
+            app.UseStatusCodePagesWithReExecute(errorActionPath);
+
+            app.UseStaticFiles();   // добавляем поддержку статических файлов
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();

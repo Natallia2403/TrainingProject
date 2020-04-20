@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using BookingSite.Web.ViewModels;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
+using Microsoft.Extensions.Configuration;
 
 namespace BookingSite.Web.Controllers
 {
     public class ErrorController : Controller
     {
-        private readonly ILogger _logger;
-
-        public ErrorController(ILogger<ErrorController> logger)
-        {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        }
-        
         /// <summary>
         /// Обработка некорректных запросов.
         /// </summary>
@@ -35,8 +32,6 @@ namespace BookingSite.Web.Controllers
                                     ?.Get<IHttpRequestFeature>()
                                     ?.RawTarget ?? $"{statusFeature?.OriginalPath}{statusFeature?.OriginalQueryString}";
 
-            _logger.LogWarning(target, $"{statusCode} ({statusCodeDescription})");
-
             var modelStatusCode = statusFeature is null
                                       ? (int)HttpStatusCode.NotFound
                                       : statusCode;
@@ -45,15 +40,32 @@ namespace BookingSite.Web.Controllers
                                                  ? $"{HttpStatusCode.NotFound}"
                                                  : $"{statusCodeDescription}";
 
-            //var model = new ErrorViewModel
-            //{
-            //    RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier,
-            //    Message = AppSystemErrorMessages.IncorrectRequest,
-            //    StatusCode = (modelStatusCode, modelStatusCodeDescription),
-            //};
+            Log.Logger = SerilogConfiguration();
+            Log.Fatal($"{modelStatusCode}", $"{modelStatusCodeDescription}");
+            Log.CloseAndFlush();
 
-            //return View(model);
-            return View();
+            var model = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier,
+                Message = String.Empty,
+                StatusCode = (statusCode, statusCodeDescription),
+            };
+
+            return View(model);
+        }
+
+        private static Logger SerilogConfiguration()
+        {
+            var configuration = new ConfigurationBuilder()
+                    .AddJsonFile("appsettings.json")
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                    .Build();
+
+            var serilogConfig = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+
+            return serilogConfig;
         }
     }
 }

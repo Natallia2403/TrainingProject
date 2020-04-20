@@ -22,6 +22,11 @@ namespace BookingSite.Web.Controllers
         ICountryManager _countryManager;
         IRoomManager _roomManager;
 
+        public ManageController(IHotelManager hotelManager)
+        {
+            _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
+        }
+
         public ManageController(ILogger<HomeController> logger,
                                  IHotelManager hotelManager, ICountryManager countryManager, IRoomManager roomManager)
         {
@@ -31,13 +36,9 @@ namespace BookingSite.Web.Controllers
             _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
         }
 
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
             var dto = await _hotelManager.GetAllAsync();
 
             HomeViewModel hvm = new HomeViewModel { Hotels = dto };

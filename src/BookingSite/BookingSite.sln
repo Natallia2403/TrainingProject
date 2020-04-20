@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0EED08DD-536A-44F4-8721-4827A1EDA681}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSite.Logic.Tests", "BookingSite.Logic.Tests\BookingSite.Logic.Tests.csproj", "{EB0B02A3-9C22-48E3-B223-2D8F9ADEC9C2}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSite.Common", "BookingSite.Common\BookingSite.Common.csproj", "{2072DFE7-C15A-4685-9D1A-B649B22EE188}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSite.Data", "BookingSite.Data\BookingSite.Data.csproj", "{0ADF7AA6-BA67-4004-9303-5549AF068899}"
@@ -17,16 +13,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSite.Domain.Logic", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSite.Web", "BookingSite.Web\BookingSite.Web.csproj", "{877AD589-8C26-460F-B0FA-F00C721BD1E4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookingSite.Tests", "BookingSite.Tests\BookingSite.Tests.csproj", "{717F9CF4-2ADC-4CD8-8758-EB292E66F976}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EB0B02A3-9C22-48E3-B223-2D8F9ADEC9C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB0B02A3-9C22-48E3-B223-2D8F9ADEC9C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB0B02A3-9C22-48E3-B223-2D8F9ADEC9C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB0B02A3-9C22-48E3-B223-2D8F9ADEC9C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2072DFE7-C15A-4685-9D1A-B649B22EE188}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2072DFE7-C15A-4685-9D1A-B649B22EE188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2072DFE7-C15A-4685-9D1A-B649B22EE188}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -47,12 +41,13 @@ Global
 		{877AD589-8C26-460F-B0FA-F00C721BD1E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{877AD589-8C26-460F-B0FA-F00C721BD1E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{877AD589-8C26-460F-B0FA-F00C721BD1E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{717F9CF4-2ADC-4CD8-8758-EB292E66F976}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{717F9CF4-2ADC-4CD8-8758-EB292E66F976}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{717F9CF4-2ADC-4CD8-8758-EB292E66F976}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{717F9CF4-2ADC-4CD8-8758-EB292E66F976}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{EB0B02A3-9C22-48E3-B223-2D8F9ADEC9C2} = {0EED08DD-536A-44F4-8721-4827A1EDA681}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C3B8C2D-5566-4B7A-9141-660026D89871}

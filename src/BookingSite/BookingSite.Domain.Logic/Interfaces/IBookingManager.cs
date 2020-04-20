@@ -9,5 +9,6 @@ namespace BookingSite.Domain.Logic.Interfaces
     public interface IBookingManager
     {
         Task AddAsync(BookingDTO dto);
+        bool IsCanBeBooked(int? id, DateTime dateFrom, DateTime dateTo);
     }
 }

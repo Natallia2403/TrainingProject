@@ -32,5 +32,18 @@ namespace BookingSite.Domain.Logic.Managers
 
             await _dataContext.SaveChangesAsync();
         }
+
+        public bool IsCanBeBooked(int? roomId, DateTime dateFrom, DateTime dateTo)
+        {
+            roomId = roomId ?? throw new ArgumentNullException(nameof(roomId));
+
+            var count = _dataContext.Bookings.AsNoTracking()
+                            .Where(b => b.RoomId == roomId && b.DateFrom >= dateFrom && b.DateTo <= dateTo)
+                            .Count();
+
+            var isCanBeBooked = count == 0;
+
+            return isCanBeBooked;
+        }
     }
 }

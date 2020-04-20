@@ -11,34 +11,7 @@
     ViewData["Title"] = "Список пользователей";
 }
 
-<style>
-    @@font-face {
-        font-family: 'FontAwesome';
-        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal
-    }
-
-    .glyphicon {
-        display: inline-block;
-        font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
-        text-rendering: auto;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale
-    }
-
-    .glyphicon-chevron-down:before {
-        content: "\f078";
-    }
-
-    .glyphicon-chevron-up:before {
-        content: "\f077";
-    }
-</style>
-
-
-<form method="get">
+<form method="get" asp-controller="Home" asp-action="SearchResult">
     <div class="form-inline form-group">
         <label class="control-label">Имя: </label>
         <input name="name" class="form-control" />
@@ -46,46 +19,51 @@
         <label class="control-label">Страна: </label>
         <select name="country" asp-items="Model.FilterViewModel.Countries" class="form-control"></select>
 
+        <label class="control-label">Дата с: </label>
+        <input name="datefrom" class="form-control" />
+
+        <label class="control-label">Дата по: </label>
+        <input name="dateto" class="form-control" />
+
         <input type="submit" value="Фильтр" class="btn btn-default" />
     </div>
 </form>
 
 
-
-<table class="table">
-    <tr>
-        <th>
-            <a asp-action="Index"
-               asp-route-sortOrder="@(Model.SortViewModel.NameSort)"
-               asp-route-name="@(Model.FilterViewModel.SelectedName)"
-               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Имя</a>
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.StarsSort)"
-               asp-route-name="@(Model.FilterViewModel.SelectedName)"
-               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Возраст</a>
-        </th>
-        <th>
-            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CountrySort)"
-               asp-route-name="@(Model.FilterViewModel.SelectedName)"
-               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Компания</a>
-        </th>
-    </tr>
-    @foreach (var h in Model.Hotels)
-    {
+    @*<table class="table">
         <tr>
-            <td><a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id">@h.Name</a></td>
-            <td>@h.Stars</td>
-            <td>@h.Country.Name</td>
-        </tr>
-    }
-</table>
-<br />
-<br />
-<page-link page-model="Model.PageViewModel" page-action="Index"
-           page-url-name="@(Model.FilterViewModel.SelectedName)"
-           page-url-company="@(Model.FilterViewModel.SelectedCountry)"
-           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>
+            <th>
+                <a asp-action="Index"
+                   asp-route-sortOrder="@(Model.SortViewModel.NameSort)"
+                   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+                   asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Имя</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.StarsSort)"
+                   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+                   asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Возраст</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CountrySort)"
+                   asp-route-name="@(Model.FilterViewModel.SelectedName)"
+                   asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Компания</a>
+            </th>
+        </tr>*@
+        @*@foreach (var h in Model.Hotels)
+        {
+            <tr>
+                <td><a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id" asp-route-datefrom="@(Model.FilterViewModel.SelectedDateFrom)" asp-route-dateto="@(Model.FilterViewModel.SelectedDateTo)">@h.Name</a></td>
+                <td>@h.Stars</td>
+                <td>@h.Country.Name</td>
+            </tr>
+        }*@
+    </table>
+    <br />
+    <br />
+    @*<page-link page-model="Model.PageViewModel" page-action="Index"
+               page-url-name="@(Model.FilterViewModel.SelectedName)"
+               page-url-company="@(Model.FilterViewModel.SelectedCountry)"
+               page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>*@
 
 
 

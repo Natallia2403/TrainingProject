@@ -20,7 +20,7 @@ namespace BookingSite.Web
             //{
             //    Log.Logger = SerilogConfiguration();
             //    Log.Information("BookingSite: LogAndSourceSuccesfullyAdded");
-
+            //
                 CreateWebHostBuilder(args).Build().Run();
             //}
             //catch (Exception ex)
