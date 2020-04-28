@@ -7,13 +7,31 @@
     <link rel="stylesheet" href="~/css/Common.css" asp-append-version="true"/>
 </head>
 <body>
-    <vc:login/>
+    <vc:login />
 
     <h1>Учебный проект BookingSite</h1>
 
+    @*<div>
+            <div>
+                <div>
+                    <ul>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Поиск</a></li>
+                        <li><a asp-area="" asp-controller="Manage" asp-action="Index">Управление</a></li>
+                        <li><a asp-area="" asp-controller="Booking" asp-action="Index">Кабинет</a></li>
+                        <li><a asp-area="" asp-controller="Users" asp-action="Index">Пользователи</a></li>
+                        <li><a asp-area="" asp-controller="Roles" asp-action="Index">Роли</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>*@
+    <vc:menu />
+    <br />
     <!--основной контент-->
     <div>
         @RenderBody()
     </div>
 </body>
 </html>
+
+
+   

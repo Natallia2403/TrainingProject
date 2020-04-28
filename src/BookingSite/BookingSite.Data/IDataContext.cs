@@ -14,11 +14,7 @@ namespace BookingSite.Data
 
         DbSet<Country> Countries { get; set; }
 
-        DbSet<Gallery> Galleries { get; set; }
-
         DbSet<Hotel> Hotels { get; set; }
-
-        DbSet<Payment> Payments { get; set; }
 
         DbSet<Room> Rooms { get; set; }
 

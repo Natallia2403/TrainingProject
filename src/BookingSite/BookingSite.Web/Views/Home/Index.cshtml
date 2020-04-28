@@ -1,7 +1,7 @@
 ﻿@using BookingSite.Web.ViewModels
 @using BookingSite.Data.Models
 
-@model HomeViewModel
+@model FilterViewModel
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,59 +11,32 @@
     ViewData["Title"] = "Список пользователей";
 }
 
-<form method="get" asp-controller="Home" asp-action="SearchResult">
-    <div class="form-inline form-group">
-        <label class="control-label">Имя: </label>
-        <input name="name" class="form-control" />
+    <form method="get" asp-controller="Home" asp-action="SearchResult"
+          asp-route-name="@Model.SelectedName"
+          asp-route-country="@Model.SelectedCountry"
+          asp-route-datefrom="@Model.SelectedDateFrom"
+          asp-route-dateto="@Model.SelectedDateTo">
+        <label style="color: red;" class="@ViewBag.IsRequiredDate">Поля "Дата С" и "Дата ПО" должны быть заполнены</label>
+        <label style="color: red;" class="@ViewBag.IsNotCopmpareDate">"Дата С" должна быть меньше, чем "Дата ПО". </label>
+        <label style="color: red;" class="@ViewBag.IsNotFutureDate">Даты должны быть старше текущей даты.</label>
+        <br /><br />
+        <div>
+            <label>Название: </label>
+            <input name="name" value="@Model.SelectedName" />
 
-        <label class="control-label">Страна: </label>
-        <select name="country" asp-items="Model.FilterViewModel.Countries" class="form-control"></select>
+            <label>Страна: </label>
+            <select name="country" value="@Model.SelectedCountry" asp-items="Model.Countries"></select>
 
-        <label class="control-label">Дата с: </label>
-        <input name="datefrom" class="form-control" />
+            <label>Дата с: </label>
+            <input name="datefrom" value="@(Model.SelectedDateFrom==DateTime.MinValue?"":@Model.SelectedDateFrom.ToShortDateString())" />
 
-        <label class="control-label">Дата по: </label>
-        <input name="dateto" class="form-control" />
+            <label>Дата по: </label>
+            <input name="dateto" value="@(Model.SelectedDateTo==DateTime.MinValue?"":@Model.SelectedDateTo.ToShortDateString())" />
 
-        <input type="submit" value="Фильтр" class="btn btn-default" />
-    </div>
-</form>
+            <input type="submit" value="Фильтр" />
+        </div>
+    </form>
 
-
-    @*<table class="table">
-        <tr>
-            <th>
-                <a asp-action="Index"
-                   asp-route-sortOrder="@(Model.SortViewModel.NameSort)"
-                   asp-route-name="@(Model.FilterViewModel.SelectedName)"
-                   asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Имя</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.StarsSort)"
-                   asp-route-name="@(Model.FilterViewModel.SelectedName)"
-                   asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Возраст</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CountrySort)"
-                   asp-route-name="@(Model.FilterViewModel.SelectedName)"
-                   asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Компания</a>
-            </th>
-        </tr>*@
-        @*@foreach (var h in Model.Hotels)
-        {
-            <tr>
-                <td><a asp-action="HotelDetails" asp-controller="Home" asp-route-id="@h.Id" asp-route-datefrom="@(Model.FilterViewModel.SelectedDateFrom)" asp-route-dateto="@(Model.FilterViewModel.SelectedDateTo)">@h.Name</a></td>
-                <td>@h.Stars</td>
-                <td>@h.Country.Name</td>
-            </tr>
-        }*@
-    </table>
-    <br />
-    <br />
-    @*<page-link page-model="Model.PageViewModel" page-action="Index"
-               page-url-name="@(Model.FilterViewModel.SelectedName)"
-               page-url-company="@(Model.FilterViewModel.SelectedCountry)"
-               page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>*@
 
 
 

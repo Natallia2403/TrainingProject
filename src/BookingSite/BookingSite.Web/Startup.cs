@@ -20,6 +20,8 @@ using BookingSite.Domain.Logic.Interfaces;
 using BookingSite.Domain.Logic.Managers;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 
 namespace BookingSite.Web
 {
@@ -58,24 +60,44 @@ namespace BookingSite.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //env.EnvironmentName = "Production";
-            if (env.IsDevelopment())
-            {
-                app.UseOpenApi().UseSwaggerUi3();
-            }
+            env.EnvironmentName = "Production";
 
-            // обработка ошибок HTTP
+            // обработка ошибок 
             var errorActionPath = $"/Error/HandleError";
+
             if (env.IsDevelopment())
             {
+                // обработка ошибок приложения
                 app.UseDeveloperExceptionPage();
+
+                // обработка ошибок HTTP
+                app.UseStatusCodePages();
             }
             else
             {
+                // обработка ошибок приложения
                 app.UseExceptionHandler(errorActionPath);
+
+                // обработка ошибок HTTP
+                app.UseStatusCodePagesWithReExecute(errorActionPath);
             }
 
-            app.UseStatusCodePagesWithReExecute(errorActionPath);
+            var supportedCultures = new[]
+           {
+                new CultureInfo("en-US"),
+                new CultureInfo("en-GB"),
+                new CultureInfo("en"),
+                new CultureInfo("ru-RU"),
+                new CultureInfo("ru"),
+                new CultureInfo("de-DE"),
+                new CultureInfo("de")
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("ru-RU"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
 
             app.UseStaticFiles();   // добавляем поддержку статических файлов
             

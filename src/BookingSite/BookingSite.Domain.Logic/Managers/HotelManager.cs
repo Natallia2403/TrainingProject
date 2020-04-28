@@ -31,6 +31,18 @@ namespace BookingSite.Domain.Logic.Managers
             return dto;
         }
 
+        public async Task<IEnumerable<HotelDTO>> GetByUserIdAsync(string userId)
+        {
+            var models = _dataContext.Hotels.AsNoTracking()
+                .Include(u => u.Country)
+                .Include(u => u.Rooms)
+                .Where(u => u.UserId == userId);
+
+            var dto = await _mapper.ProjectTo<HotelDTO>(models).ToListAsync();
+
+            return dto;
+        }
+
         public async Task<HotelDTO> GetByIdAsync(int? id)
         {
             id = id ?? throw new ArgumentNullException(nameof(id));

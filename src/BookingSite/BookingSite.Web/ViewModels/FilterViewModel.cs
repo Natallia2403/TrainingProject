@@ -27,10 +27,10 @@ namespace BookingSite.Web.ViewModels
 
         public string SelectedName { get; private set; }
 
-        [Required]
+        [DataType(DataType.Date)]
         public DateTime SelectedDateFrom { get; private set; }
 
-        [Required]
+        [DataType(DataType.Date)]
         public DateTime SelectedDateTo { get; private set; }
     }
 }

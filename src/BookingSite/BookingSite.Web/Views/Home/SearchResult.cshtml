@@ -12,41 +12,50 @@
 }
 
 <form method="get">
-    <div class="form-inline form-group">
-        <label class="control-label">Имя: </label>
-        <input name="name" class="form-control" />
+    <div>
+        <label>Название: </label>
+        <input asp-for="@Model.FilterViewModel.SelectedName" disabled="@ViewBag.IsFiltered" />
 
-        <label class="control-label">Страна: </label>
-        <select name="country" asp-items="Model.FilterViewModel.Countries" class="form-control"></select>
+        <label>Страна: </label>
+        <select asp-for="@Model.FilterViewModel.SelectedCountry" asp-items="Model.FilterViewModel.Countries" disabled="@ViewBag.IsFiltered" ></select>
 
-        <label class="control-label">Дата с: </label>
-        <input name="datefrom" class="form-control" />
+        <label>Дата с: </label>
+        <input asp-for="@Model.FilterViewModel.SelectedDateFrom" disabled="@ViewBag.IsFiltered" />
 
-        <label class="control-label">Дата по: </label>
-        <input name="dateto" class="form-control" />
+        <label>Дата по: </label>
+        <input asp-for="@Model.FilterViewModel.SelectedDateTo" disabled="@ViewBag.IsFiltered" />
 
-        <input type="submit" value="Фильтр" class="btn btn-default" />
+        <input type="submit" value="Фильтр" disabled="@ViewBag.IsFiltered"/>
     </div>
+    <br />
 </form>
 
 
 <table class="table">
     <tr>
         <th>
-            <a asp-action="Index"
+            <a asp-action="SearchResult" asp-route-issort="true"
                asp-route-sortOrder="@(Model.SortViewModel.NameSort)"
                asp-route-name="@(Model.FilterViewModel.SelectedName)"
-               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Имя</a>
+               asp-route-country="@(Model.FilterViewModel.SelectedCountry)"
+               asp-route-datefrom="@(Model.FilterViewModel.SelectedDateFrom)"
+           asp-route-dateto="@(Model.FilterViewModel.SelectedDateTo)">Имя</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.StarsSort)"
+            <a asp-action="SearchResult" asp-route-issort="true"
+               asp-route-sortOrder="@(Model.SortViewModel.StarsSort)"
                asp-route-name="@(Model.FilterViewModel.SelectedName)"
-               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Возраст</a>
+               asp-route-country="@(Model.FilterViewModel.SelectedCountry)"
+               asp-route-datefrom="@(Model.FilterViewModel.SelectedDateFrom)"
+           asp-route-dateto="@(Model.FilterViewModel.SelectedDateTo)">Звёзды</a>
         </th>
         <th>
-            <a asp-action="Index" asp-route-sortOrder="@(Model.SortViewModel.CountrySort)"
+            <a asp-action="SearchResult" asp-route-issort="true"
+               asp-route-sortOrder="@(Model.SortViewModel.CountrySort)"
                asp-route-name="@(Model.FilterViewModel.SelectedName)"
-               asp-route-company="@(Model.FilterViewModel.SelectedCountry)">Компания</a>
+               asp-route-country="@(Model.FilterViewModel.SelectedCountry)"
+               asp-route-datefrom="@(Model.FilterViewModel.SelectedDateFrom)"
+               asp-route-dateto="@(Model.FilterViewModel.SelectedDateTo)">Компания</a>
         </th>
     </tr>
     @foreach (var h in Model.Hotels)
@@ -59,11 +68,13 @@
     }
 </table>
 <br />
-<br />
-<page-link page-model="Model.PageViewModel" page-action="Index"
+<page-link page-model="Model.PageViewModel" page-action="SearchResult"
            page-url-name="@(Model.FilterViewModel.SelectedName)"
-           page-url-company="@(Model.FilterViewModel.SelectedCountry)"
-           page-url-sortorder="@(Model.SortViewModel.Current)"></page-link>
+           page-url-country="@(Model.FilterViewModel.SelectedCountry)"
+           page-url-sortorder="@(Model.SortViewModel.Current)"
+           page-url-datefrom="@(Model.FilterViewModel.SelectedDateFrom)"
+           page-url-dateto="@(Model.FilterViewModel.SelectedDateTo)">
+</page-link>
 
 
 

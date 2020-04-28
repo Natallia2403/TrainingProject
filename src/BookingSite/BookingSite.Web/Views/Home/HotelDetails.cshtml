@@ -5,55 +5,55 @@
     ViewData["Title"] = "Описание отеля";
 }
 
-<form>
-    <h3>Описание отеля @Model.Name</h3>
-    <div>
-        <dl>
-            <dt>Страна</dt>
-            <dd>@Model.Country.Name</dd>
+    <form>
+        <h3>Описание отеля @Model.Name</h3>
+        <div>
+            <dl>
+                <dt>Страна</dt>
+                <dd>@Model.Country.Name</dd>
 
-            <dt>Название</dt>
-            <dd>@Model.Name</dd>
+                <dt>Название</dt>
+                <dd>@Model.Name</dd>
 
-            <dt>Описание</dt>
-            <dd>@Model.Description</dd>
+                <dt>Описание</dt>
+                <dd>@Model.Description</dd>
 
-            <dt>Адрес</dt>
-            <dd>@Model.Address</dd>
+                <dt>Адрес</dt>
+                <dd>@Model.Address</dd>
 
-            <dt>Класс отеля</dt>
-            <dd>@Model.Stars</dd>
+                <dt>Класс отеля</dt>
+                <dd>@Model.Stars</dd>
 
-            <dt>Аппартаменты</dt>
-            <dd>@Model.IsAppartment</dd>
-        </dl>
-    </div>
-    <table>
+                <dt>Аппартаменты</dt>
+                <dd>@(Model.IsAppartment ? "Да" : "Нет")</dd>
+            </dl>
+        </div>
+        <h4>Комнаты:</h4>
+        <table>
+            @foreach (var r in Model.Rooms)
+            {
+                <tr>
+                    <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
+                    <td rowspan="2">
+                        <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo">Подробнее</a>
+                    </td>
 
-        @foreach (var r in Model.Rooms)
-        {
-        <tr>
-            <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
-            <td rowspan="2">
-                <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo">Подробнее</a>
-            </td>
-            
-            <td rowspan="2">
-                @if (r.IsCanBeBooked)
-                {
-                    <a asp-action="Book" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo">Забронировать</a>
-                }
-                else
-                {
-                    <label>На эти даты комната недоступна</label>
-                }
-            </td>
-        </tr>
-            <tr>
-                <td>
-                    Цена: @r.Price
-                </td>
-            </tr>
-        }
-    </table>
-</form>
+                    <td rowspan="2">
+                        @if (r.IsCanBeBooked)
+                        {
+                            <input type="submit" value="Забронировать" asp-action="Book" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo"/>
+                        }
+                        else
+                        {
+                            <label>На эти даты комната недоступна</label>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Цена: @r.Price
+                    </td>
+                </tr>
+            }
+        </table>
+    </form>

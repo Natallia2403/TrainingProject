@@ -1,0 +1,35 @@
+﻿@using BookingSite.Web.ViewModels
+@using BookingSite.Domain.DTO
+
+@model BookingInfoViewModel
+@{
+    ViewData["Title"] = "Booking Cabinet";
+}
+
+<form>
+    <table>
+        <tr>
+            <td></td>
+            <td>Отель</td>
+            <td>Комната</td>
+            <td>Цена</td>
+            <td>Дата с</td>
+            <td>Дата по</td>
+            <td></td>
+        </tr>
+        @foreach (var b in Model.Bookings)
+            {
+    <tr>
+        <td><b>@(b.DateFrom > DateTime.Now ? "NEW" : "Old")</b></td>
+        <td>@b.Room.Hotel.Name</td>
+        <td>@b.Room.Description</td>
+        <td>@b.Room.Price</td>
+        <td>@b.DateFrom.ToShortDateString()</td>
+        <td>@b.DateTo.ToShortDateString()</td>
+        <td>
+            <a asp-action="BookingDelete" asp-controller="Booking" asp-route-id="@b.Id" onclick="javascript:return confirm('Вы действительно хотите удалить бронирование?')">Удалить</a>
+        </td>
+    </tr>
+            }
+    </table>
+</form>

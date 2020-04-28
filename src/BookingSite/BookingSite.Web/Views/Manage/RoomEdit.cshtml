@@ -5,7 +5,6 @@
 @{
     ViewData["Title"] = "Редактирование комнаты ";
 }
-    
 
     <form method="post">
         <h3>Редактирование комнаты @Model.Description</h3>
@@ -38,7 +37,7 @@
         </div>
         <div>
             <label>Отель:</label>
-            <select asp-for="@Model.HotelId">
+            <select asp-for="@Model.HotelId" disabled="disabled">
                 @foreach (var hotel in Model.Hotels)
                 {
                     <option value="@hotel.Id">@hotel.Name</option>
@@ -46,6 +45,7 @@
             </select>
         </div>
         <div>
+            <br />
             <input type="submit" value="Сохранить" />
         </div>
     </form>

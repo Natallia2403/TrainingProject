@@ -8,6 +8,8 @@ namespace BookingSite.Data.Models
     {
         public int Id { get; set; }
 
+        public string UserId { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -21,8 +23,6 @@ namespace BookingSite.Data.Models
         public int CountryId { get; set; }
 
         public Country Country { get; set; }
-
-        public List<Gallery> Galleries { get; set; }
 
         public List<Room> Rooms { get; set; }
     }

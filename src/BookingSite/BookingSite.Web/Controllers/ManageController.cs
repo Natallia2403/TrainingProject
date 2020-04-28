@@ -11,6 +11,7 @@ using BookingSite.Domain.Logic.Interfaces;
 using BookingSite.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using BookingSite.Domain.DTO;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookingSite.Web.Controllers
 {
@@ -21,25 +22,33 @@ namespace BookingSite.Web.Controllers
         IHotelManager _hotelManager;
         ICountryManager _countryManager;
         IRoomManager _roomManager;
+        private readonly UserManager<User> _userManager;
+        IBookingManager _bookingManager;
 
-        public ManageController(IHotelManager hotelManager)
-        {
-            _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
-        }
+        //public ManageController(IHotelManager hotelManager)
+        //{
+        //    _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
+        //}
 
         public ManageController(ILogger<HomeController> logger,
-                                 IHotelManager hotelManager, ICountryManager countryManager, IRoomManager roomManager)
+                                 IHotelManager hotelManager, ICountryManager countryManager, 
+                                 IRoomManager roomManager, UserManager<User> userManager, 
+                                 IBookingManager bookingManager)
         {
             _logger = logger;
             _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
             _countryManager = countryManager ?? throw new ArgumentNullException(nameof(countryManager));
             _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var dto = await _hotelManager.GetAllAsync();
+            var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+
+            var dto = await _hotelManager.GetByUserIdAsync(userId);
 
             HomeViewModel hvm = new HomeViewModel { Hotels = dto };
 
@@ -61,7 +70,9 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new HotelDTO { Name = viewModel.Name, Description = viewModel.Description, Address = viewModel.Address, CountryId = viewModel.CountryId, IsAppartment = viewModel.IsAppartment, Stars = viewModel.Stars };
+                var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+
+                var dto = new HotelDTO { UserId = userId, Name = viewModel.Name, Description = viewModel.Description, Address = viewModel.Address, CountryId = viewModel.CountryId, IsAppartment = viewModel.IsAppartment, Stars = viewModel.Stars };
 
                 await _hotelManager.AddAsync(dto);
 
@@ -100,7 +111,9 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new HotelDTO { Id = viewModel.Id, Name = viewModel.Name, Description = viewModel.Description, Address = viewModel.Address, CountryId = viewModel.CountryId, IsAppartment = viewModel.IsAppartment, Stars = viewModel.Stars };
+                var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+
+                var dto = new HotelDTO { Id = viewModel.Id, Name = viewModel.Name, Description = viewModel.Description, Address = viewModel.Address, CountryId = viewModel.CountryId, IsAppartment = viewModel.IsAppartment, Stars = viewModel.Stars, UserId = userId };
 
                 await _hotelManager.UpdateAsync(dto);
 
@@ -135,14 +148,24 @@ namespace BookingSite.Web.Controllers
         {
             var dto = await _roomManager.GetByIdAsync(id);
 
-            return View(dto);
+            var bookings = await _bookingManager.GetByRoomIdAsync(id.Value);
+
+            RoomInfoViewModel viewModel = new RoomInfoViewModel
+            {
+                Room = dto,
+                Bookings = bookings
+            };
+
+            return View(viewModel);
         }
 
-        public IActionResult RoomCreate(int? hotelId)
+        public async Task<IActionResult> RoomCreateAsync(int? hotelId)
         {
-            ViewBag.HotelId = hotelId;
+            var dtoHotels = await _hotelManager.GetAllAsync();
 
-            return View();
+            RoomViewModel viewModel = new RoomViewModel { Hotels = dtoHotels, HotelId = hotelId.Value };
+
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -150,7 +173,7 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new RoomDTO { Description = viewModel.Description, MaxNumberOfGuests = viewModel.MaxNumberOfGuests.Value, Price = viewModel.Price.Value, PrePayment = viewModel.PrePayment, HasBalcony = viewModel.HasBalcony, HasKitchen = viewModel.HasKitchen, HotelId = viewModel.HotelId };
+                var dto = new RoomDTO { Description = viewModel.Description, MaxNumberOfGuests = viewModel.MaxNumberOfGuests.Value, Price = viewModel.Price.Value, HasBalcony = viewModel.HasBalcony, HasKitchen = viewModel.HasKitchen, HotelId = viewModel.HotelId };
 
                 await _roomManager.AddAsync(dto);
 
@@ -162,6 +185,8 @@ namespace BookingSite.Web.Controllers
 
                 viewModel.Hotels = dtoHotels;
 
+                ViewBag.HotelId = viewModel.HotelId;
+
                 return View(viewModel);
             }
         }
@@ -172,7 +197,7 @@ namespace BookingSite.Web.Controllers
 
             var dtoHotels = await _hotelManager.GetAllAsync();
 
-            RoomViewModel viewModel = new RoomViewModel { Hotels = dtoHotels, Description = dtoRoom.Description, MaxNumberOfGuests = dtoRoom.MaxNumberOfGuests, Price = dtoRoom.Price, PrePayment = dtoRoom.PrePayment, HasBalcony = dtoRoom.HasBalcony, HasKitchen = dtoRoom.HasKitchen, HotelId = dtoRoom.HotelId, Id = dtoRoom.Id };
+            RoomViewModel viewModel = new RoomViewModel { Hotels = dtoHotels, Description = dtoRoom.Description, MaxNumberOfGuests = dtoRoom.MaxNumberOfGuests, Price = dtoRoom.Price, HasBalcony = dtoRoom.HasBalcony, HasKitchen = dtoRoom.HasKitchen, HotelId = dtoRoom.HotelId, Id = dtoRoom.Id };
 
             return View(viewModel);
         }
@@ -182,7 +207,7 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var dto = new RoomDTO { Description = viewModel.Description, MaxNumberOfGuests = viewModel.MaxNumberOfGuests.Value, Price = viewModel.Price.Value, PrePayment = viewModel.PrePayment, HasBalcony = viewModel.HasBalcony, HasKitchen = viewModel.HasKitchen, HotelId = viewModel.HotelId, Id = viewModel.Id };
+                var dto = new RoomDTO { Description = viewModel.Description, MaxNumberOfGuests = viewModel.MaxNumberOfGuests.Value, Price = viewModel.Price.Value, HasBalcony = viewModel.HasBalcony, HasKitchen = viewModel.HasKitchen, HotelId = viewModel.HotelId, Id = viewModel.Id };
 
                 await _roomManager.UpdateAsync(dto);
 

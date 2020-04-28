@@ -11,6 +11,8 @@ namespace BookingSite.Domain.Logic.Interfaces
     {
         Task<IEnumerable<HotelDTO>> GetAllAsync();
 
+        Task<IEnumerable<HotelDTO>> GetByUserIdAsync(string userId);
+
         Task<HotelDTO> GetByIdAsync(int? id);
 
         Task AddAsync(HotelDTO dto);

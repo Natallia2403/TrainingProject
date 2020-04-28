@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using BookingSite.Common.Enums;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Globalization;
 
 namespace BookingSite.Web.Controllers
 {
@@ -25,62 +25,26 @@ namespace BookingSite.Web.Controllers
         IRoomManager _roomManager;
         IBookingManager _bookingManager;
         ICountryManager _countryManager;
+        private readonly UserManager<User> _userManager;
 
         public HomeController(ILogger<HomeController> logger,
                                  IHotelManager hotelManager, IRoomManager roomManager, 
-                                 IBookingManager bookingManager, ICountryManager countryManager)
+                                 IBookingManager bookingManager, ICountryManager countryManager,
+                                 UserManager<User> userManager)
         {
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
             _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
             _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
             _countryManager = countryManager ?? throw new ArgumentNullException(nameof(countryManager));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<IActionResult> Index(int? country, string name, DateTime dateFrom, DateTime dateTo, int page = 1, SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> Index(int? country, string name, DateTime dateFrom, DateTime dateTo, 
+            bool isRequired, bool isNotFuture, bool isNotCompare)
         {
-            int pageSize = 3;
-
-            //фильтрация
-            var hotelsDto = await _hotelManager.GetAllAsync();
-            if (country != null && country != 0)
-            {
-                hotelsDto = hotelsDto.Where(p => p.CountryId == country);
-            }
-            if (!String.IsNullOrEmpty(name))
-            {
-                hotelsDto = hotelsDto.Where(p => p.Name.Contains(name));
-            }
-            //TODO: здесь фильтрация по датам
-
-            // сортировка
-            switch (sortOrder)
-            {
-                case SortState.NameDesc:
-                    hotelsDto = hotelsDto.OrderByDescending(s => s.Name);
-                    break;
-                case SortState.StarsAsc:
-                    hotelsDto = hotelsDto.OrderBy(s => s.Stars);
-                    break;
-                case SortState.StarsDesc:
-                    hotelsDto = hotelsDto.OrderByDescending(s => s.Stars);
-                    break;
-                case SortState.CountryAsc:
-                    hotelsDto = hotelsDto.OrderBy(s => s.Country.Name);
-                    break;
-                case SortState.CountryDesc:
-                    hotelsDto = hotelsDto.OrderByDescending(s => s.Country.Name);
-                    break;
-                default:
-                    hotelsDto = hotelsDto.OrderBy(s => s.Name);
-                    break;
-            }
-
-
-            // пагинация
-            var HotelDTOLst = hotelsDto.ToList();
-            var count = HotelDTOLst.Count();
-            var items = HotelDTOLst.Skip((page - 1) * pageSize).Take(pageSize);
+            var aa = CultureInfo.CurrentCulture.Name;
+            var bb = CultureInfo.CurrentUICulture.Name;
 
             //страны
             var countriesDto = await _countryManager.GetAllAsync();
@@ -89,41 +53,73 @@ namespace BookingSite.Web.Controllers
             CountryDTO allCountriesItem = new CountryDTO { Id = 0, Name = "Все" };
             countriesLst.Insert(0, allCountriesItem);
 
+            if (isRequired)
+                ViewBag.IsRequiredDate = string.Empty;
+            else
+                ViewBag.IsRequiredDate = "field-validation-valid";
+
+            if (isNotFuture)
+                ViewBag.IsNotFutureDate = string.Empty;
+            else
+                ViewBag.IsNotFutureDate = "field-validation-valid";
+
+            if (isNotCompare)
+                ViewBag.IsNotCopmpareDate = string.Empty;
+            else
+                ViewBag.IsNotCopmpareDate = "field-validation-valid";
+
             // формируем модель представления
-            HomeViewModel viewModel = new HomeViewModel
-            {
-                PageViewModel = new PageViewModel(count, page, pageSize),
-                SortViewModel = new SortViewModel(sortOrder),
-                FilterViewModel = new FilterViewModel(countriesLst, country, name, dateFrom, dateTo),
-                Hotels = items
-            };
+            var viewModel = new FilterViewModel(countriesLst, country, name, dateFrom, dateTo);
 
             return View(viewModel);
-            //return RedirectToAction("SearchResult", viewModel);
         }
 
-        public async Task<IActionResult> SearchResult(int? country, string name, DateTime dateFrom, DateTime dateTo, int page = 1, SortState sortOrder = SortState.NameAsc)
+        public async Task<IActionResult> SearchResult(int? country, string name, DateTime dateFrom, DateTime dateTo,
+            bool? isSort,
+            SortState? sortOrder,
+            int? page)
         {
-            //фильтрация
-            if (dateFrom == DateTime.MinValue || dateTo == DateTime.MinValue)
+            
+            if (dateFrom == DateTime.MinValue || dateTo == DateTime.MinValue)//required validation
+                return RedirectToAction("Index", new { country = country, name = name, dateFrom = dateFrom, dateTo = dateTo, isRequired = true });
+
+            if (dateFrom > dateTo || dateFrom < DateTime.Now || dateTo < DateTime.Now)
             {
-                
+                var isNotCompare = false;
+                var isNotFuture = false;
+
+                if (dateFrom > dateTo)//compare validation
+                    isNotCompare = true;
+
+                if (dateFrom < DateTime.Now || dateTo < DateTime.Now)//future validation
+                    isNotFuture = true;
+
+                return RedirectToAction("Index", new { country = country, name = name, dateFrom = dateFrom, dateTo = dateTo, isNotFuture = isNotFuture, isNotCompare = isNotCompare });
             }
+
+            //фильтрация
+            var isFiltered = country.HasValue || !string.IsNullOrWhiteSpace(name);
+
+            ViewBag.IsFiltered = isFiltered;
 
             var hotelsDto = await _hotelManager.GetAllAsync();
 
             if (country != null && country != 0)
-            {
                 hotelsDto = hotelsDto.Where(p => p.CountryId == country);
-            }
+
             if (!String.IsNullOrEmpty(name))
-            {
-                hotelsDto = hotelsDto.Where(p => p.Name.Contains(name));
-            }
-            //TODO: здесь фильтрация по датам
+                hotelsDto = hotelsDto.Where(p => p.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase));
 
             // сортировка
-            switch (sortOrder)
+            var sortOrderTemp = sortOrder.HasValue ? sortOrder.Value : SortState.NameAsc;
+            var sortOrderFin = sortOrderTemp;
+            if (!isSort.HasValue)
+                sortOrderFin = new SortViewModel(sortOrderTemp).Current;
+            var sortViewModel = new SortViewModel(sortOrderFin);
+
+            var so = sortViewModel.Current;
+
+            switch (so)
             {
                 case SortState.NameDesc:
                     hotelsDto = hotelsDto.OrderByDescending(s => s.Name);
@@ -145,12 +141,13 @@ namespace BookingSite.Web.Controllers
                     break;
             }
 
-
             // пагинация
             int pageSize = 3;
             var HotelDTOLst = hotelsDto.ToList();
             var count = HotelDTOLst.Count();
-            var items = HotelDTOLst.Skip((page - 1) * pageSize).Take(pageSize);
+
+            var pageTemp = page.HasValue ? page.Value : 1;
+            var items = HotelDTOLst.Skip((pageTemp - 1) * pageSize).Take(pageSize);
 
             //страны
             var countriesDto = await _countryManager.GetAllAsync();
@@ -162,8 +159,8 @@ namespace BookingSite.Web.Controllers
             // формируем модель представления
             HomeViewModel viewModel = new HomeViewModel
             {
-                PageViewModel = new PageViewModel(count, page, pageSize),
-                SortViewModel = new SortViewModel(sortOrder),
+                PageViewModel = new PageViewModel(count, pageTemp, pageSize),
+                SortViewModel = sortViewModel,
                 FilterViewModel = new FilterViewModel(countriesLst, country, name, dateFrom, dateTo),
                 Hotels = items
             };
@@ -179,7 +176,7 @@ namespace BookingSite.Web.Controllers
             ViewBag.DateTo = dateTo;
 
             foreach (var room in hotelDto.Rooms)
-                room.IsCanBeBooked = _bookingManager.IsCanBeBooked(room.Id, dateFrom, dateTo);
+                room.IsCanBeBooked = _bookingManager.IsCanBeBookedAsync(room.Id, dateFrom, dateTo).Result;
 
             return View(hotelDto);
         }
@@ -192,7 +189,7 @@ namespace BookingSite.Web.Controllers
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
 
-            var isCanBeBooked = _bookingManager.IsCanBeBooked(id, dateFrom, dateTo);
+            var isCanBeBooked = await _bookingManager.IsCanBeBookedAsync(id, dateFrom, dateTo);
             ViewBag.IsCanBeBooked = isCanBeBooked;
 
             return View(dto);
@@ -219,9 +216,9 @@ namespace BookingSite.Web.Controllers
 
         private async Task<IActionResult> MakeBook(int? id, DateTime dateFrom, DateTime dateTo)
         {
-            var userName = HttpContext.User.Identity.Name;
+            var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
 
-            var dto = new BookingDTO { RoomId = id.Value, UserName = userName, DateFrom = dateFrom, DateTo = dateTo };
+            var dto = new BookingDTO { RoomId = id.Value, UserId = userId, DateFrom = dateFrom, DateTo = dateTo };
 
             await _bookingManager.AddAsync(dto);
 

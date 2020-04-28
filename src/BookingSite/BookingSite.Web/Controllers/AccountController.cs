@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using BookingSite.Data.Models;
 using BookingSite.Web.ViewModels;
+using System.Diagnostics;
 
 namespace BookingSite.Web.Controllers
 {
@@ -99,6 +100,20 @@ namespace BookingSite.Web.Controllers
             // удаляем аутентификационные куки
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult AccessDenied()
+        {
+            string errorActionPath = $"~/Views/Error/HandleError.cshtml";
+
+            var model = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier,
+                Message = "Доступ запрещен. Пожалуйста, обратитесь к Администратору.",
+                StatusCode = (403, ""),
+            };
+
+            return View(errorActionPath, model);
         }
     }
 }

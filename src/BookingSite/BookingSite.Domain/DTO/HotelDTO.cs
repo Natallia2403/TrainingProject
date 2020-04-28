@@ -10,6 +10,8 @@ namespace BookingSite.Domain.DTO
     {
         public int Id { get; set; }
 
+        public string UserId { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
@@ -23,8 +25,6 @@ namespace BookingSite.Domain.DTO
         public int CountryId { get; set; }
 
         public CountryDTO Country { get; set; }
-
-        public List<GalleryDTO> Galleries { get; set; }
 
         public List<RoomDTO> Rooms { get; set; }
     }

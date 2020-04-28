@@ -22,18 +22,17 @@ namespace BookingSite.Tests
         [Fact]
         public void IndexReturnsAViewResultWithAListOfUsers()
         {
-            //1 - create a List<T> with test items
             IEnumerable<HotelDTO> hotelDTOs = GetTestHotels();
 
             //Arrange
             var mock = new Mock<IHotelManager>();
             mock.Setup(repo => repo.GetAllAsync()).Returns(Task.FromResult((hotelDTOs)));
-            var controller = new ManageController(mock.Object);
+            var controller = new ManageController(null, mock.Object, null, null, null, null);
 
-            // Act
+            //Act
             var result = controller.Index();
 
-            // Assert
+            //Assert
             var viewResult = Assert.IsType<ViewResult>(result.Result);
         }
 

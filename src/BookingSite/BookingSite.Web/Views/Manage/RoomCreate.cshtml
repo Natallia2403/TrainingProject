@@ -11,7 +11,7 @@
         <h3>Добавление комнаты</h3>
         <div class="validation" asp-validation-summary="ModelOnly"></div>
         <div>
-            <input type="hidden" asp-for="@Model.HotelId" value="@ViewBag.HotelId" />
+            <input type="hidden" asp-for="@Model.HotelId" />
         </div>
         <div>
             <label>Описание</label>
@@ -35,6 +35,15 @@
         <div>
             <label>Кухня</label>
             <input type="checkbox" asp-for="@Model.HasKitchen" />
+        </div>
+        <div>
+            <label>Отель:</label>
+            <select asp-for="@Model.HotelId" disabled="disabled">
+                @foreach (var hotel in Model.Hotels)
+                {
+                    <option value="@hotel.Id">@hotel.Name</option>
+                }
+            </select>
         </div>
         <br /><br />
         <input type="submit" value="Отправить" />
