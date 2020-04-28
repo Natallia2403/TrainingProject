@@ -1,0 +1,15 @@
+﻿
+    <div>
+        <li><a asp-area="" asp-controller="Home" asp-action="Index">Поиск</a></li>
+
+        @if (User.IsInRole("manager"))
+        {
+            <li><a asp-area="" asp-controller="Manage" asp-action="Index">Управление</a></li>
+            <li><a asp-area="" asp-controller="Booking" asp-action="Index">Кабинет</a></li>
+        }
+        @if (User.IsInRole("admin"))
+        {
+            <li><a asp-area="" asp-controller="Users" asp-action="Index">Пользователи</a></li>
+            <li><a asp-area="" asp-controller="Roles" asp-action="Index">Роли</a></li>
+        }
+    </div>

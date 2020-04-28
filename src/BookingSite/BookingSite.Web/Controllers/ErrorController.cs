@@ -44,14 +44,22 @@ namespace BookingSite.Web.Controllers
             Log.Fatal($"{modelStatusCode}", $"{modelStatusCodeDescription}");
             Log.CloseAndFlush();
 
+            var message = string.Empty;
+            if(statusCode == 500)
+                message = "Во время работы приложения произошла непредвиденная ошибка. Пожалуйста, обратитесь к Администратору.";
+            else if (statusCode == 404)
+                message = "Такая страница не существует. Пожалуйста, обратитесь к Администратору.";
+            else if (statusCode == 403)
+                message = "Доступ запрещен. Пожалуйста, обратитесь к Администратору.";
+
             var model = new ErrorViewModel
             {
                 RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier,
-                Message = String.Empty,
+                Message = message,
                 StatusCode = (statusCode, statusCodeDescription),
             };
 
-            return View(model);
+            return View( model);
         }
 
         private static Logger SerilogConfiguration()

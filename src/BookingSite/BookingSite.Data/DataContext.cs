@@ -14,11 +14,7 @@ namespace BookingSite.Data
 
         public DbSet<Country> Countries { get; set; }
 
-        public DbSet<Gallery> Galleries { get; set; }
-
         public DbSet<Hotel> Hotels { get; set; }
-
-        public DbSet<Payment> Payments { get; set; }
 
         public DbSet<Room> Rooms { get; set; }
 
@@ -38,11 +34,7 @@ namespace BookingSite.Data
 
             modelBuilder.ApplyConfiguration(new CountryConfiguration());
 
-            modelBuilder.ApplyConfiguration(new GalleryConfiguration());
-
             modelBuilder.ApplyConfiguration(new HotelConfiguration());
-
-            modelBuilder.ApplyConfiguration(new PaymentConfiguration());
 
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
 

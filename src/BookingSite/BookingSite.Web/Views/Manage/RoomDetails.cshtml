@@ -1,10 +1,44 @@
-﻿@using BookingSite.Domain.DTO
+﻿@using BookingSite.Web.ViewModels
 
-@model RoomDTO
+@model RoomInfoViewModel
 @{
     ViewData["Title"] = "Описание комнаты ";
 }
 
     <form>
-        @await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
-        </form>
+        @{
+            ViewData["Title"] = "Описание комнаты";
+        }
+
+        <h3>Описание комнаты @Model.Room.Description</h3>
+
+        <div>
+            <dl>
+
+                <dt>Отель</dt>
+                <dd>@Model.Room.Hotel.Name</dd>
+
+                <dt>Максимальное число гостей</dt>
+                <dd>@Model.Room.MaxNumberOfGuests</dd>
+
+                <dt>Цена</dt>
+                <dd>@Model.Room.Price</dd>
+
+                <dt>Балкон</dt>
+                <dd>@Model.Room.HasBalcony</dd>
+
+                <dt>Кухня</dt>
+                <dd>@Model.Room.HasKitchen</dd>
+            </dl>
+        </div>
+        <h4>Брони:</h4>
+        <table>
+            @foreach (var b in Model.Bookings)
+            {
+                <tr>
+                    <td>@b.DateFrom - @b.DateTo</td>
+                    <td>@b.User.FirstName @b.User.LastName (@b.User.UserName)</td>
+                </tr>
+            }
+        </table>
+    </form>

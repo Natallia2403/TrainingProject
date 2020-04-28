@@ -25,11 +25,6 @@ namespace BookingSite.Web.ViewModels
         [Required(ErrorMessage = "Не указана цена")]
         public int? Price { get; set; }
 
-        /// <summary>
-        /// В процентах
-        /// </summary>
-        public int PrePayment { get; set; }
-
         public bool HasBalcony { get; set; }
 
         public bool HasKitchen { get; set; }

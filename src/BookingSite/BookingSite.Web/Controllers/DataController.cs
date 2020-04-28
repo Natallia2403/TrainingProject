@@ -36,6 +36,29 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> AddAsync()
         {
+            //Users & Roles
+            string adminEmail = "natallia.2403@gmail.com";
+            string password = "Aa1234567+";
+
+            if (await _roleManager.FindByNameAsync("admin") == null)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("admin"));
+            }
+            if (await _roleManager.FindByNameAsync("manager") == null)
+            {
+                await _roleManager.CreateAsync(new IdentityRole("manager"));
+            }
+            if (await _userManager.FindByNameAsync(adminEmail) == null)
+            {
+                User admin = new User { Email = adminEmail, UserName = adminEmail, FirstName = "Наталия", LastName = "Ключникова" };
+                IdentityResult result = await _userManager.CreateAsync(admin, password);
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(admin, "admin");
+                    await _userManager.AddToRoleAsync(admin, "manager");
+                }
+            }
+
             //Countries
             Country country1 = new Country { Name = "Беларусь" };
             Country country2 = new Country { Name = "Россия" };
@@ -52,10 +75,12 @@ namespace BookingSite.Web.Controllers
             _dataContext.Countries.Add(country6);
 
             //Hotels
-            Hotel hotel1 = new Hotel { Name = "Парус", Country = country1, Stars = 3, IsAppartment = false };
-            Hotel hotel2 = new Hotel { Name = "Олимп", Country = country2, Stars = 3, IsAppartment = false };
-            Hotel hotel3 = new Hotel { Name = "Вивульскио", Country = country3, Stars = 3, IsAppartment = false };
-            Hotel hotel4 = new Hotel { Name = "Шерлок", Country = country4, Stars = 3, IsAppartment = true };
+            var userId = _userManager.FindByNameAsync(adminEmail).Result.Id;
+
+            Hotel hotel1 = new Hotel { UserId = userId, Name = "Парус", Country = country1, Stars = 3, IsAppartment = false };
+            Hotel hotel2 = new Hotel { UserId = userId, Name = "Олимп", Country = country2, Stars = 3, IsAppartment = false };
+            Hotel hotel3 = new Hotel { UserId = userId, Name = "Вивульскио", Country = country3, Stars = 3, IsAppartment = false };
+            Hotel hotel4 = new Hotel { UserId = userId, Name = "Шерлок", Country = country4, Stars = 3, IsAppartment = true };
 
             _dataContext.Hotels.Add(hotel1);
             _dataContext.Hotels.Add(hotel2);
@@ -68,28 +93,6 @@ namespace BookingSite.Web.Controllers
 
             _dataContext.Rooms.Add(room1);
             _dataContext.Rooms.Add(room2);
-
-            //Users & Roles
-            string adminEmail = "natallia.2403@gmail.com";
-            string password = "Aa1234567+";
-
-            if (await _roleManager.FindByNameAsync("admin") == null)
-            {
-                await _roleManager.CreateAsync(new IdentityRole("admin"));
-            }
-            if (await _roleManager.FindByNameAsync("manager") == null)
-            {
-                await _roleManager.CreateAsync(new IdentityRole("manager"));
-            }
-            if (await _userManager.FindByNameAsync(adminEmail) == null)
-            {
-                User admin = new User { Email = adminEmail, UserName = adminEmail };
-                IdentityResult result = await _userManager.CreateAsync(admin, password);
-                if (result.Succeeded)
-                {
-                    await _userManager.AddToRoleAsync(admin, "admin");
-                }
-            }
 
             _dataContext.SaveChanges();
 

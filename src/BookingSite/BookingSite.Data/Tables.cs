@@ -12,12 +12,12 @@ namespace BookingSite.Data
 
         public static readonly string EventLog = nameof(EventLog);
 
-        public static readonly string Gallery = nameof(Gallery);
-
         public static readonly string Hotel = nameof(Hotel);
 
         public static readonly string Payment = nameof(Payment);
 
         public static readonly string Room = nameof(Room);
+
+        public static readonly string AspNetUsers = nameof(AspNetUsers);
     }
 }

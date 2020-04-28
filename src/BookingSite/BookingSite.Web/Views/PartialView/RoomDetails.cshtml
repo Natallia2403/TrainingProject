@@ -17,9 +17,9 @@
         <dd>@Model.Price</dd>
 
         <dt>Балкон</dt>
-        <dd>@Model.HasBalcony</dd>
+        <dd>@(Model.HasBalcony? "Да" : "Нет")</dd>
 
         <dt>Кухня</dt>
-        <dd>@Model.HasKitchen</dd>
+        <dd>@(Model.HasKitchen? "Да" : "Нет")</dd>
     </dl>
 </div>

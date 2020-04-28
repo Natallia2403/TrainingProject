@@ -2,9 +2,10 @@
 
     <form>
         @await Html.PartialAsync("~/Views/PartialView/HotelDetails.cshtml")
+        <h4>Комнаты:</h4>
         <a asp-controller="Manage" asp-action="RoomCreate" asp-route-hotelId="@Model.Id">Добавить комнату</a>
+        <br/><br />
         <table>
-
             @foreach (var r in Model.Rooms)
             {
                 <tr>
