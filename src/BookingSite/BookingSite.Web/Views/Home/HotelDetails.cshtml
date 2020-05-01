@@ -5,7 +5,7 @@
     ViewData["Title"] = "Описание отеля";
 }
 
-    <form>
+   
         <h3>Описание отеля @Model.Name</h3>
         <div>
             <dl>
@@ -35,13 +35,18 @@
                 <tr>
                     <td>Максимальное количество гостей: @r.MaxNumberOfGuests</td>
                     <td rowspan="2">
-                        <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo">Подробнее</a>
+                        <a asp-action="RoomDetails" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom.ToShortDateString()" asp-route-dateto="@(ViewBag.DateTo.ToShortDateString())">Подробнее</a>
                     </td>
 
                     <td rowspan="2">
                         @if (r.IsCanBeBooked)
                         {
-                            <input type="submit" value="Забронировать" asp-action="Book" asp-controller="Home" asp-route-id="@r.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo"/>
+                        <form method="post" asp-controller="Home" asp-action="Book">
+                            <input type="submit" value="Забронировать"/>
+                            <input type="hidden" value="@r.Id" name="id" />
+                            <input type="hidden" value="@(ViewBag.DateFrom.ToShortDateString())" name="datefrom" />
+                            <input type="hidden" value="@(ViewBag.DateTo.ToShortDateString())" name="dateto" />
+                        </form>
                         }
                         else
                         {
@@ -56,4 +61,4 @@
                 </tr>
             }
         </table>
-    </form>
+

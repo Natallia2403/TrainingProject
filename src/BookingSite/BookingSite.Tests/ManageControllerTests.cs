@@ -14,6 +14,9 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Collections;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookingSite.Tests
 {
@@ -23,11 +26,25 @@ namespace BookingSite.Tests
         public void IndexReturnsAViewResultWithAListOfUsers()
         {
             IEnumerable<HotelDTO> hotelDTOs = GetTestHotels();
+            var user = GetTestUser();
 
             //Arrange
-            var mock = new Mock<IHotelManager>();
-            mock.Setup(repo => repo.GetAllAsync()).Returns(Task.FromResult((hotelDTOs)));
-            var controller = new ManageController(null, mock.Object, null, null, null, null);
+            var mockHotel = new Mock<IHotelManager>();
+            var mockLogging = new Mock<ILogger<HomeController>>();
+            var mockCountry = new Mock<ICountryManager>();
+            var mockRoom = new Mock<IRoomManager>();
+            var mockBooking = new Mock<IBookingManager>();
+            var mockUser = new Mock<IUserManager>();
+
+            //mockHotel.Setup(repo => repo.GetAllAsync()).Returns(Task.FromResult((hotelDTOs)));
+
+            mockHotel.Setup(repo => repo.GetByUserIdAsync("")).Returns(Task.FromResult((hotelDTOs)));
+
+            mockUser.Setup(repo => repo.GetCurrentUserId(null)).Returns(("natallia.2403@gmail.com"));
+
+            // mockUser.Setup(repo => repo.FindByNameAsync("")).Returns((user));
+
+            var controller = new ManageController(mockLogging.Object, mockHotel.Object, mockCountry.Object, mockRoom.Object, mockUser.Object, mockBooking.Object);
 
             //Act
             var result = controller.Index();
@@ -36,37 +53,16 @@ namespace BookingSite.Tests
             var viewResult = Assert.IsType<ViewResult>(result.Result);
         }
 
-        private void GetTestData()
+        private User GetTestUser()
         {
-            //Countries
-            List<Country> countries = new List<Country>();
+            string adminEmail = "natallia.2403@gmail.com";
 
-            Country country1 = new Country { Name = "Беларусь" };
-            Country country2 = new Country { Name = "Россия" };
-            Country country3 = new Country { Name = "Украина" };
-            Country country4 = new Country { Name = "Литва" };
-            Country country5 = new Country { Name = "Швеция" };
-            Country country6 = new Country { Name = "Финляндия" };
+            User admin = new User { Email = adminEmail, UserName = adminEmail, FirstName = "Наталия", LastName = "Ключникова" };
 
-            countries.Add(country1);
-            countries.Add(country2);
-            countries.Add(country3);
-            countries.Add(country4);
-            countries.Add(country5);
-            countries.Add(country6);
-
-
-
-            ////Rooms
-            //List<Room> rooms = new List<Room>();
-            //Room room1 = new Room { Hotel = hotel1, Description = "Номер Люкс", HasBalcony = true, HasKitchen = true, MaxNumberOfGuests = 4, Price = 100 };
-            //Room room2 = new Room { Hotel = hotel1, Description = "Номер Эконом", HasBalcony = false, HasKitchen = false, MaxNumberOfGuests = 2, Price = 20 };
-
-            //_dataContext.Rooms.Add(room1);
-            //_dataContext.Rooms.Add(room2);
+            return admin;
         }
 
-        private List<HotelDTO> GetTestHotels()
+        private IEnumerable<HotelDTO> GetTestHotels()
         {
             //Countries
             List<CountryDTO> countries = new List<CountryDTO>();
@@ -91,6 +87,5 @@ namespace BookingSite.Tests
 
             return hotels;
         }
-
     }
 }

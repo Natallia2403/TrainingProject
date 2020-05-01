@@ -55,12 +55,13 @@ namespace BookingSite.Web
             services.AddScoped<ICountryManager, CountryManager>();
             services.AddScoped<IRoomManager, RoomManager>();
             services.AddScoped<IBookingManager, BookingManager>();
+            services.AddScoped<IUserManager, UserManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            env.EnvironmentName = "Production";
+            //env.EnvironmentName = "Production";
 
             // обработка ошибок 
             var errorActionPath = $"/Error/HandleError";
@@ -82,22 +83,22 @@ namespace BookingSite.Web
                 app.UseStatusCodePagesWithReExecute(errorActionPath);
             }
 
-            var supportedCultures = new[]
-           {
-                new CultureInfo("en-US"),
-                new CultureInfo("en-GB"),
-                new CultureInfo("en"),
-                new CultureInfo("ru-RU"),
-                new CultureInfo("ru"),
-                new CultureInfo("de-DE"),
-                new CultureInfo("de")
-            };
-            app.UseRequestLocalization(new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("ru-RU"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures
-            });
+           // var supportedCultures = new[]
+           //{
+           //     new CultureInfo("en-US"),
+           //     new CultureInfo("en-GB"),
+           //     new CultureInfo("en"),
+           //     new CultureInfo("ru-RU"),
+           //     new CultureInfo("ru"),
+           //     new CultureInfo("de-DE"),
+           //     new CultureInfo("de")
+           // };
+           // app.UseRequestLocalization(new RequestLocalizationOptions
+           // {
+           //     DefaultRequestCulture = new RequestCulture("ru-RU"),
+           //     SupportedCultures = supportedCultures,
+           //     SupportedUICultures = supportedCultures
+           // });
 
             app.UseStaticFiles();   // добавляем поддержку статических файлов
             

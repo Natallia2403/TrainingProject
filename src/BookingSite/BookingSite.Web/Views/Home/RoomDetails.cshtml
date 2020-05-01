@@ -5,7 +5,7 @@
     ViewData["Title"] = "Описание отеля";
 }
 
-    <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id" asp-route-datefrom="@ViewBag.DateFrom" asp-route-dateto="@ViewBag.DateTo">
+    <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id" asp-route-datefrom="@ViewBag.DateFrom.ToShortDateString()" asp-route-dateto="@ViewBag.DateTo.ToShortDateString()">
         @await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
         <br /><br />
         @if (User.Identity.IsAuthenticated)

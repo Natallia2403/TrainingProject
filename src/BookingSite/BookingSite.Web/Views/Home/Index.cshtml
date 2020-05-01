@@ -14,8 +14,8 @@
     <form method="get" asp-controller="Home" asp-action="SearchResult"
           asp-route-name="@Model.SelectedName"
           asp-route-country="@Model.SelectedCountry"
-          asp-route-datefrom="@Model.SelectedDateFrom"
-          asp-route-dateto="@Model.SelectedDateTo">
+          asp-route-datefrom="@Model.SelectedDateFrom.ToShortDateString()"
+          asp-route-dateto="@Model.SelectedDateTo.ToShortDateString()">
         <label style="color: red;" class="@ViewBag.IsRequiredDate">Поля "Дата С" и "Дата ПО" должны быть заполнены</label>
         <label style="color: red;" class="@ViewBag.IsNotCopmpareDate">"Дата С" должна быть меньше, чем "Дата ПО". </label>
         <label style="color: red;" class="@ViewBag.IsNotFutureDate">Даты должны быть старше текущей даты.</label>

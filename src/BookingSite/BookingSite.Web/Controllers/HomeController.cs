@@ -176,7 +176,10 @@ namespace BookingSite.Web.Controllers
             ViewBag.DateTo = dateTo;
 
             foreach (var room in hotelDto.Rooms)
-                room.IsCanBeBooked = _bookingManager.IsCanBeBookedAsync(room.Id, dateFrom, dateTo).Result;
+            {
+                var isCanBeBooked = _bookingManager.IsCanBeBookedAsync(room.Id, dateFrom, dateTo).Result;
+                room.IsCanBeBooked = isCanBeBooked;
+            }
 
             return View(hotelDto);
         }
@@ -222,7 +225,7 @@ namespace BookingSite.Web.Controllers
 
             await _bookingManager.AddAsync(dto);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Booking");
         }
     }
 }

@@ -22,17 +22,12 @@ namespace BookingSite.Web.Controllers
         IHotelManager _hotelManager;
         ICountryManager _countryManager;
         IRoomManager _roomManager;
-        private readonly UserManager<User> _userManager;
+        IUserManager _userManager;
         IBookingManager _bookingManager;
 
-        //public ManageController(IHotelManager hotelManager)
-        //{
-        //    _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
-        //}
-
         public ManageController(ILogger<HomeController> logger,
-                                 IHotelManager hotelManager, ICountryManager countryManager, 
-                                 IRoomManager roomManager, UserManager<User> userManager, 
+                                 IHotelManager hotelManager, ICountryManager countryManager,
+                                 IRoomManager roomManager, IUserManager userManager,
                                  IBookingManager bookingManager)
         {
             _logger = logger;
@@ -46,11 +41,17 @@ namespace BookingSite.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+            //var userName = _userManager.GetCurrentUserName(HttpContext);
 
-            var dto = await _hotelManager.GetByUserIdAsync(userId);
+            //var user = _userManager.FindByNameAsync(userName);
 
-            HomeViewModel hvm = new HomeViewModel { Hotels = dto };
+            //var userId = user.Id;
+
+            var userId = _userManager.GetCurrentUserId(HttpContext);
+
+            var dto = _hotelManager.GetByUserIdAsync(userId);
+
+            HomeViewModel hvm = new HomeViewModel { Hotels = dto.Result };
 
             return View(hvm);
         }
@@ -70,7 +71,7 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+                var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Id;
 
                 var dto = new HotelDTO { UserId = userId, Name = viewModel.Name, Description = viewModel.Description, Address = viewModel.Address, CountryId = viewModel.CountryId, IsAppartment = viewModel.IsAppartment, Stars = viewModel.Stars };
 
@@ -111,7 +112,7 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+                var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Id;
 
                 var dto = new HotelDTO { Id = viewModel.Id, Name = viewModel.Name, Description = viewModel.Description, Address = viewModel.Address, CountryId = viewModel.CountryId, IsAppartment = viewModel.IsAppartment, Stars = viewModel.Stars, UserId = userId };
 
@@ -236,9 +237,9 @@ namespace BookingSite.Web.Controllers
         {
             var hotels = await _hotelManager.GetAllAsync();
 
-            foreach(var h in hotels)
+            foreach (var h in hotels)
             {
-                if(h.Name == name)
+                if (h.Name == name)
                     return Json(false);//Данные не прошли валидацию
             }
             return Json(true);
