@@ -17,7 +17,14 @@
                     <td>
                         <a asp-action="HotelDetails" asp-controller="Manage" asp-route-id="@h.Id">Подробнее</a> |
                         <a asp-action="HotelEdit" asp-controller="Manage" asp-route-id="@h.Id">Изменить</a> |
-                        <a asp-action="HotelDelete" asp-controller="Manage" asp-route-id="@h.Id" onclick="javascript:return confirm('Вы действительно хотите удалить данный отель?')">Удалить</a>
+                        @if (@h.Rooms != null && @h.Rooms.Count > 0)
+                        {
+                            <label>Чтобы удаление стало доступно, удалите сперва комнаты</label>
+                        }
+                        else
+                        {
+                            <a asp-action="HotelDelete" asp-controller="Manage" asp-route-id="@h.Id" onclick="javascript:return confirm('Вы действительно хотите удалить данный отель?')">Удалить</a>
+                        }
                     </td>
                 </tr>
             }

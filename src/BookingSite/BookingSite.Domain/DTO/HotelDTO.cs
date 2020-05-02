@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BookingSite.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,8 +10,6 @@ namespace BookingSite.Domain.DTO
     public class HotelDTO
     {
         public int Id { get; set; }
-
-        public string UserId { get; set; }
 
         public string Name { get; set; }
 
@@ -25,6 +24,10 @@ namespace BookingSite.Domain.DTO
         public int CountryId { get; set; }
 
         public CountryDTO Country { get; set; }
+
+        public string UserId { get; set; }
+
+        public User User { get; set; }
 
         public List<RoomDTO> Rooms { get; set; }
     }

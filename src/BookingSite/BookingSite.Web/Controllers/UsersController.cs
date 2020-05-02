@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using BookingSite.Data.Models;
 using BookingSite.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using BookingSite.Domain.Logic.Interfaces;
+using System;
 
 namespace BookingSite.Web.Controllers
 {
@@ -12,13 +14,20 @@ namespace BookingSite.Web.Controllers
     public class UsersController : Controller
     {
         UserManager<User> _userManager;
+        IBookingManager _bookingManager;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<User> userManager, IBookingManager bookingManager)
         {
-            _userManager = userManager;
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
         }
 
-        public IActionResult Index() => View(_userManager.Users.ToList());
+        //public IActionResult Index() => View(_userManager.Users.ToList());
+        public async Task<IActionResult> IndexAsync()
+        {
+            var users = _userManager.Users.ToList();
+            return View(users);
+        }
 
         public IActionResult Create() => View();
 

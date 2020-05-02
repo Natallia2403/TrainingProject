@@ -1,28 +1,37 @@
-﻿@model IEnumerable<BookingSite.Data.Models.User>
+﻿@using BookingSite.Domain.Logic.Managers
+
+@model IEnumerable<BookingSite.Data.Models.User>
 @{
     ViewData["Title"] = "Список пользователей";
 }
 
 @*<a asp-action="Create">Добавить пользователя</a>*@
 
-<table >
+<table>
     <tr><th>Email</th><th>Год</th><th>Имя</th><th>Фамилия</th><th></th></tr>
     @foreach (var user in Model)
     {
-<tr>
-    <td>@user.Email</td>
-    <td>@user.Year</td>
-    <td>@user.FirstName</td>
-    <td>@user.LastName</td>
-    <td>
-        <form asp-action="Delete" asp-route-id="@user.Id" method="post">
-            <a asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
-            <a asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
-            <button type="submit">
-                Удалить
-            </button>
-        </form>
-    </td>
-</tr>
+        <tr>
+            <td>@user.Email</td>
+            <td>@user.Year</td>
+            <td>@user.FirstName</td>
+            <td>@user.LastName</td>
+            <td>
+                <form asp-action="Delete" asp-route-id="@user.Id" method="post">
+                    <a asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                    <a asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+                    @if (user.Bookings != null && user.Bookings.Count > 0 || user.Hotels != null && user.Hotels.Count > 0)
+                    {
+                        <button type="submit">
+                            Удалить
+                        </button>
+                    }
+                    else
+                    {
+                        <label>Чтобы удаление стало доступно, удалите сперва отели и брони, созданные эти пользователем</label>
+                    }
+                </form>
+            </td>
+        </tr>
     }
 </table>

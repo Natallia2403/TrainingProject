@@ -10,10 +10,11 @@ namespace BookingSite.Web.ViewModels
     {
         public string Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Поле обязательно для заполнения")]
         [EmailAddress(ErrorMessage = "Некорректный Email адрес")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Поле обязательно для заполнения")]
         public int? Year { get; set; }
 
         public string FirstName { get; set; }
