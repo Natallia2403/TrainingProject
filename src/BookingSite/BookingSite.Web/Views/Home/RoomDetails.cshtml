@@ -8,19 +8,21 @@
     <form asp-action="Book" asp-controller="Home" asp-route-id="@Model.Id" asp-route-datefrom="@ViewBag.DateFrom.ToShortDateString()" asp-route-dateto="@ViewBag.DateTo.ToShortDateString()">
         @await Html.PartialAsync("~/Views/PartialView/RoomDetails.cshtml")
         <br /><br />
-        @if (User.Identity.IsAuthenticated)
+
+        @if (ViewBag.IsCanBeBooked)
         {
-            @if (ViewBag.IsCanBeBooked)
+            @if (User.Identity.IsAuthenticated)
             {
                 <input type="submit" value="Забронировать" />
             }
             else
             {
-                <label>На эти даты комната недоступна</label>
+                <label>Пожалуйста, войдите в систему, чтобы забронировать</label>
             }
         }
         else
         {
-            <label>Пожалуйста, войдите в систему, чтобы забронировать</label>
+            <label>На эти даты комната недоступна</label>
         }
+
     </form>

@@ -47,7 +47,11 @@ namespace BookingSite.Domain.Logic.Managers
         {
             id = id ?? throw new ArgumentNullException(nameof(id));
 
-            var model = await _dataContext.Hotels.AsNoTracking().Include(u => u.Country).Include(u => u.Rooms).FirstOrDefaultAsync(h => h.Id == id);
+            var model = await _dataContext.Hotels.AsNoTracking()
+                .Include(h => h.Country)
+                .Include(h => h.Rooms)
+                    .ThenInclude(room => room.Bookings)
+                .FirstOrDefaultAsync(h => h.Id == id);
             if (model != null)
             {
                 var dto = _mapper.Map<HotelDTO>(model);

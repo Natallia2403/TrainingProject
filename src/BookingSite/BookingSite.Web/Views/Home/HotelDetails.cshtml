@@ -39,19 +39,28 @@
                     </td>
 
                     <td rowspan="2">
+
                         @if (r.IsCanBeBooked)
                         {
-                        <form method="post" asp-controller="Home" asp-action="Book">
-                            <input type="submit" value="Забронировать"/>
-                            <input type="hidden" value="@r.Id" name="id" />
-                            <input type="hidden" value="@(ViewBag.DateFrom.ToShortDateString())" name="datefrom" />
-                            <input type="hidden" value="@(ViewBag.DateTo.ToShortDateString())" name="dateto" />
-                        </form>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <form method="post" asp-controller="Home" asp-action="Book">
+                                    <input type="submit" value="Забронировать" />
+                                    <input type="hidden" value="@r.Id" name="id" />
+                                    <input type="hidden" value="@(ViewBag.DateFrom.ToShortDateString())" name="datefrom" />
+                                    <input type="hidden" value="@(ViewBag.DateTo.ToShortDateString())" name="dateto" />
+                                </form>
+                            }
+                            else
+                            {
+                                <label>Пожалуйста, войдите в систему, чтобы забронировать</label>
+                            }
                         }
                         else
                         {
                             <label>На эти даты комната недоступна</label>
                         }
+
                     </td>
                 </tr>
                 <tr>

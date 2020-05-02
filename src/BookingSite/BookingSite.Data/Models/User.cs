@@ -17,5 +17,7 @@ namespace BookingSite.Data.Models
         public string LastName { get; set; }
 
         public List<Booking> Bookings { get; set; }
+
+        public List<Hotel> Hotels { get; set; }
     }
 }

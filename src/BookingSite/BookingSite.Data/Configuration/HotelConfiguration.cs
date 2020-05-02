@@ -24,6 +24,11 @@ namespace BookingSite.Data.Configuration
                     .WithMany(t => t.Hotels)//методы WithOne и WithMany идентифицируют навигационное свойство на стороне связанной сущности
                     .HasForeignKey(p => p.CountryId)//внешний ключ
                     .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(ag => ag.User)//Методы HasOne и HasMany устанавливают навигационное свойство для сущности, для которой производится конфигурация
+                    .WithMany(t => t.Hotels)//методы WithOne и WithMany идентифицируют навигационное свойство на стороне связанной сущности
+                    .HasForeignKey(p => p.UserId)//внешний ключ
+                    .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
