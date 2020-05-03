@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using BookingSite.Data.Models;
 using BookingSite.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using System;
 
 namespace BookingSite.Web.Controllers
@@ -13,19 +13,19 @@ namespace BookingSite.Web.Controllers
     [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
-        UserManager<User> _userManager;
-        IBookingManager _bookingManager;
+        UserManager<User> _userRepository;
+        IBookingRepository _bookingRepository;
 
-        public UsersController(UserManager<User> userManager, IBookingManager bookingManager)
+        public UsersController(UserManager<User> userManager, IBookingRepository bookingRepositary)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
+            _userRepository = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _bookingRepository = bookingRepositary ?? throw new ArgumentNullException(nameof(bookingRepositary));
         }
 
-        //public IActionResult Index() => View(_userManager.Users.ToList());
+        //public IActionResult Index() => View(_userRepository.Users.ToList());
         public async Task<IActionResult> IndexAsync()
         {
-            var users = _userManager.Users.ToList();
+            var users = _userRepository.Users.ToList();
             return View(users);
         }
 
@@ -37,7 +37,7 @@ namespace BookingSite.Web.Controllers
             if (ModelState.IsValid)
             {
                 User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year.Value, FirstName = model.FirstName, LastName = model.LastName };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _userRepository.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index");
@@ -55,7 +55,7 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User user = await _userRepository.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -69,7 +69,7 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(model.Id);
+                User user = await _userRepository.FindByIdAsync(model.Id);
                 if (user != null)
                 {
                     user.Email = model.Email;
@@ -78,7 +78,7 @@ namespace BookingSite.Web.Controllers
                     user.FirstName = model.FirstName;
                     user.LastName = model.LastName;
 
-                    var result = await _userManager.UpdateAsync(user);
+                    var result = await _userRepository.UpdateAsync(user);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index");
@@ -99,17 +99,17 @@ namespace BookingSite.Web.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User user = await _userRepository.FindByIdAsync(id);
             if (user != null)
             {
-                IdentityResult result = await _userManager.DeleteAsync(user);
+                IdentityResult result = await _userRepository.DeleteAsync(user);
             }
             return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ChangePassword(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            User user = await _userRepository.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -123,11 +123,11 @@ namespace BookingSite.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(model.Id);
+                User user = await _userRepository.FindByIdAsync(model.Id);
                 if (user != null)
                 {
                     IdentityResult result =
-                        await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        await _userRepository.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
                         return RedirectToAction("Index");

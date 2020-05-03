@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -9,27 +9,27 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingSite.Domain.Logic.Managers
+namespace BookingSite.Domain.Repositories
 {
-    public class UserManager : IUserManager
+    public class UserRepository : IUserRepository
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userRepository;
         IMapper _mapper;
 
-        public UserManager()
+        public UserRepository()
         {
 
         }
 
-        public UserManager(UserManager<User> userManager, IMapper mapper)
+        public UserRepository(UserManager<User> userManager, IMapper mapper)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _userRepository = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public User FindByNameAsync(string userName)
         {
-            var user = _userManager.FindByNameAsync(userName).Result;
+            var user = _userRepository.FindByNameAsync(userName).Result;
 
             return user;
         }

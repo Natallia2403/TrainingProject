@@ -15,16 +15,16 @@ namespace BookingSite.Web.Controllers
         /// <summary>
         /// сервис по управлению пользователями 
         /// </summary>
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<User> _userRepository;
         /// <summary>
         /// сервис, который позволяет аутентифицировать пользователя и устанавливать или удалять его куки.
         /// </summary>
-        private readonly SignInManager<User> _signInManager;
+        private readonly SignInManager<User> _signInRepository;
 
         public AccountController(UserManager<User> userManager, SignInManager<User> signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _userRepository = userManager;
+            _signInRepository = signInManager;
         }
 
         [HttpGet]
@@ -40,12 +40,12 @@ namespace BookingSite.Web.Controllers
             {
                 User user = new User { Email = model.Email, UserName = model.Email, Year = model.Year.Value, FirstName = model.FirstName, LastName = model.LastName };
                 // добавляем пользователя
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = await _userRepository.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
                     // установка аутентификационных куки
-                    await _signInManager.SignInAsync(user, false);
+                    await _signInRepository.SignInAsync(user, false);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -72,7 +72,7 @@ namespace BookingSite.Web.Controllers
             if (ModelState.IsValid)
             {
                 var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                    await _signInRepository.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     // проверяем, принадлежит ли URL приложению
@@ -98,7 +98,7 @@ namespace BookingSite.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             // удаляем аутентификационные куки
-            await _signInManager.SignOutAsync();
+            await _signInRepository.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
 

@@ -1,4 +1,4 @@
-﻿using BookingSite.Domain.Logic.Interfaces;
+﻿using BookingSite.Domain.Interfaces;
 using BookingSite.Web.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,6 +17,7 @@ using System.Collections;
 using Castle.Core.Logging;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
+using BookingSite.Domain.Logic.Interfaces;
 
 namespace BookingSite.Tests
 {
@@ -26,32 +27,58 @@ namespace BookingSite.Tests
         public void IndexReturnsAViewResultWithAListOfUsers()
         {
             IEnumerable<HotelDTO> hotelDTOs = GetTestHotels();
-            var user = GetTestUser();
 
             //Arrange
-            var mockHotel = new Mock<IHotelManager>();
+            var mockHotel = new Mock<IHotelRepository>();
             var mockLogging = new Mock<ILogger<HomeController>>();
-            var mockCountry = new Mock<ICountryManager>();
-            var mockRoom = new Mock<IRoomManager>();
-            var mockBooking = new Mock<IBookingManager>();
-            var mockUser = new Mock<IUserManager>();
+            var mockCountry = new Mock<ICountryRepository>();
+            var mockRoom = new Mock<IRoomRepository>();
+            var mockBooking = new Mock<IBookingRepository>();
+            var mockUser = new Mock<IUserRepository>();
 
-            //mockHotel.Setup(repo => repo.GetAllAsync()).Returns(Task.FromResult((hotelDTOs)));
+            var mockManage = new Mock<IManageManager>();
 
-            mockHotel.Setup(repo => repo.GetByUserIdAsync("")).Returns(Task.FromResult((hotelDTOs)));
+            mockManage.Setup(repo => repo.GetHotelsByUserId(null)).Returns((hotelDTOs));
 
-            mockUser.Setup(repo => repo.GetCurrentUserId(null)).Returns(("natallia.2403@gmail.com"));
-
-            // mockUser.Setup(repo => repo.FindByNameAsync("")).Returns((user));
-
-            var controller = new ManageController(mockLogging.Object, mockHotel.Object, mockCountry.Object, mockRoom.Object, mockUser.Object, mockBooking.Object);
+            var controller = new ManageController(mockLogging.Object, mockHotel.Object, mockCountry.Object, mockRoom.Object, mockUser.Object, mockBooking.Object, mockManage.Object);
 
             //Act
             var result = controller.Index();
 
             //Assert
-            var viewResult = Assert.IsType<ViewResult>(result.Result);
+            var viewResult = Assert.IsType<ViewResult>(result);
         }
+
+        //[Fact]
+        //public void IndexReturnsAViewResultWithAListOfUsers()
+        //{
+        //    IEnumerable<HotelDTO> hotelDTOs = GetTestHotels();
+        //    var user = GetTestUser();
+
+        //    //Arrange
+        //    var mockHotel = new Mock<IHotelRepository>();
+        //    var mockLogging = new Mock<ILogger<HomeController>>();
+        //    var mockCountry = new Mock<ICountryRepository>();
+        //    var mockRoom = new Mock<IRoomRepository>();
+        //    var mockBooking = new Mock<IBookingRepository>();
+        //    var mockUser = new Mock<IUserRepository>();
+
+        //    //mockHotel.Setup(repo => repo.GetAllAsync()).Returns(Task.FromResult((hotelDTOs)));
+
+        //    mockHotel.Setup(repo => repo.GetByUserIdAsync("")).Returns(Task.FromResult((hotelDTOs)));
+
+        //    mockUser.Setup(repo => repo.GetCurrentUserId(null)).Returns(("natallia.2403@gmail.com"));
+
+        //    // mockUser.Setup(repo => repo.FindByNameAsync("")).Returns((user));
+
+        //    var controller = new ManageController(mockLogging.Object, mockHotel.Object, mockCountry.Object, mockRoom.Object, mockUser.Object, mockBooking.Object);
+
+        //    //Act
+        //    var result = controller.Index();
+
+        //    //Assert
+        //    var viewResult = Assert.IsType<ViewResult>(result.Result);
+        //}
 
         private User GetTestUser()
         {

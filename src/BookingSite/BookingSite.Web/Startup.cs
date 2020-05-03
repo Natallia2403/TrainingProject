@@ -16,12 +16,14 @@ using Microsoft.Extensions.Logging;
 using BookingSite.Data;
 using BookingSite.Data.Models;
 using BookingSite.Domain.Logic;
-using BookingSite.Domain.Logic.Interfaces;
-using BookingSite.Domain.Logic.Managers;
+using BookingSite.Domain.Interfaces;
+using BookingSite.Domain.Repositories;
 using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Logic.Managers;
 
 namespace BookingSite.Web
 {
@@ -51,11 +53,13 @@ namespace BookingSite.Web
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
 
-            services.AddScoped<IHotelManager, HotelManager>();
-            services.AddScoped<ICountryManager, CountryManager>();
-            services.AddScoped<IRoomManager, RoomManager>();
-            services.AddScoped<IBookingManager, BookingManager>();
-            services.AddScoped<IUserManager, UserManager>();
+            services.AddScoped<IHotelRepository, HotelRepository>();
+            services.AddScoped<ICountryRepository, CountryRepository>();
+            services.AddScoped<IRoomRepository, RoomRepository>();
+            services.AddScoped<IBookingRepository, BookingRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IManageManager, ManageManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

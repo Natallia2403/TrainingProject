@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using BookingSite.Data.Models;
 using BookingSite.Domain.DTO;
 
-namespace BookingSite.Domain.Logic.Interfaces
+namespace BookingSite.Domain.Interfaces
 {
-    public interface IHotelManager
+    public interface IHotelRepository
     {
         Task<IEnumerable<HotelDTO>> GetAllAsync();
 

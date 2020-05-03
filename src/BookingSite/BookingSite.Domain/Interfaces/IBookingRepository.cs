@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BookingSite.Domain.Logic.Interfaces
+namespace BookingSite.Domain.Interfaces
 {
-    public interface IBookingManager
+    public interface IBookingRepository
     {
         Task AddAsync(BookingDTO dto);
 

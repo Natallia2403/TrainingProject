@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
 namespace BookingSite.Web.Controllers
@@ -14,21 +14,21 @@ namespace BookingSite.Web.Controllers
     public class DataController : Controller
     {
         DataContext _dataContext;
-        IHotelManager _hotelManager;
-        ICountryManager _countryManager;
-        IRoomManager _roomManager;
-        UserManager<User> _userManager;
+        IHotelRepository _hotelRepository;
+        ICountryRepository _countryRepository;
+        IRoomRepository _roomRepository;
+        UserManager<User> _userRepository;
         RoleManager<IdentityRole> _roleManager;
 
-        public DataController(DataContext context, IHotelManager hotelManager, ICountryManager countryManager, IRoomManager roomManager
+        public DataController(DataContext context, IHotelRepository hotelRepositary, ICountryRepository countryRepositary, IRoomRepository roomRepositary
                                 , UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             context = context ?? throw new ArgumentNullException(nameof(context));
-            _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
-            _countryManager = countryManager ?? throw new ArgumentNullException(nameof(countryManager));
-            _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
+            _hotelRepository = hotelRepositary ?? throw new ArgumentNullException(nameof(hotelRepositary));
+            _countryRepository = countryRepositary ?? throw new ArgumentNullException(nameof(countryRepositary));
+            _roomRepository = roomRepositary ?? throw new ArgumentNullException(nameof(roomRepositary));
 
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _userRepository = userManager ?? throw new ArgumentNullException(nameof(userManager));
             _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager));
 
             _dataContext = context;
@@ -48,14 +48,14 @@ namespace BookingSite.Web.Controllers
             {
                 await _roleManager.CreateAsync(new IdentityRole("manager"));
             }
-            if (await _userManager.FindByNameAsync(adminEmail) == null)
+            if (await _userRepository.FindByNameAsync(adminEmail) == null)
             {
                 User admin = new User { Email = adminEmail, UserName = adminEmail, FirstName = "Наталия", LastName = "Ключникова" };
-                IdentityResult result = await _userManager.CreateAsync(admin, password);
+                IdentityResult result = await _userRepository.CreateAsync(admin, password);
                 if (result.Succeeded)
                 {
-                    await _userManager.AddToRoleAsync(admin, "admin");
-                    await _userManager.AddToRoleAsync(admin, "manager");
+                    await _userRepository.AddToRoleAsync(admin, "admin");
+                    await _userRepository.AddToRoleAsync(admin, "manager");
                 }
             }
 
@@ -75,7 +75,7 @@ namespace BookingSite.Web.Controllers
             _dataContext.Countries.Add(country6);
 
             //Hotels
-            var userId = _userManager.FindByNameAsync(adminEmail).Result.Id;
+            var userId = _userRepository.FindByNameAsync(adminEmail).Result.Id;
 
             Hotel hotel1 = new Hotel { UserId = userId, Name = "Парус", Country = country1, Stars = 3, IsAppartment = false };
             Hotel hotel2 = new Hotel { UserId = userId, Name = "Олимп", Country = country2, Stars = 3, IsAppartment = false };

@@ -6,17 +6,17 @@ using AutoMapper;
 using BookingSite.Data;
 using BookingSite.Data.Models;
 using BookingSite.Domain.DTO;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace BookingSite.Domain.Logic.Managers
+namespace BookingSite.Domain.Repositories
 {
-    public class BookingManager : IBookingManager
+    public class BookingRepository : IBookingRepository
     {
         DataContext _dataContext;
         IMapper _mapper;
 
-        public BookingManager(DataContext dataContext, IMapper mapper)
+        public BookingRepository(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

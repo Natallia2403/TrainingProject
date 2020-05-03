@@ -13,12 +13,12 @@ namespace CustomIdentityApp.Controllers
     public class RolesController : Controller
     {
         RoleManager<IdentityRole> _roleManager;
-        UserManager<User> _userManager;
+        UserManager<User> _userRepository;
 
         public RolesController(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             _roleManager = roleManager;
-            _userManager = userManager;
+            _userRepository = userManager;
         }
 
         public IActionResult Index() => View(_roleManager.Roles.ToList());
@@ -62,16 +62,16 @@ namespace CustomIdentityApp.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult UserList() => View(_userManager.Users.ToList());
+        public IActionResult UserList() => View(_userRepository.Users.ToList());
 
         public async Task<IActionResult> Edit(string userId)
         {
             // получаем пользователя
-            User user = await _userManager.FindByIdAsync(userId);
+            User user = await _userRepository.FindByIdAsync(userId);
             if (user != null)
             {
                 // получем список ролей пользователя
-                var userRoles = await _userManager.GetRolesAsync(user);
+                var userRoles = await _userRepository.GetRolesAsync(user);
                 var allRoles = _roleManager.Roles.ToList();
                 ChangeRoleViewModel model = new ChangeRoleViewModel
                 {
@@ -89,11 +89,11 @@ namespace CustomIdentityApp.Controllers
         public async Task<IActionResult> Edit(string userId, List<string> roles)
         {
             // получаем пользователя
-            User user = await _userManager.FindByIdAsync(userId);
+            User user = await _userRepository.FindByIdAsync(userId);
             if (user != null)
             {
                 // получем список ролей пользователя
-                var userRoles = await _userManager.GetRolesAsync(user);
+                var userRoles = await _userRepository.GetRolesAsync(user);
                 // получаем все роли
                 var allRoles = _roleManager.Roles.ToList();
                 // получаем список ролей, которые были добавлены
@@ -101,9 +101,9 @@ namespace CustomIdentityApp.Controllers
                 // получаем роли, которые были удалены
                 var removedRoles = userRoles.Except(roles);
 
-                await _userManager.AddToRolesAsync(user, addedRoles);
+                await _userRepository.AddToRolesAsync(user, addedRoles);
 
-                await _userManager.RemoveFromRolesAsync(user, removedRoles);
+                await _userRepository.RemoveFromRolesAsync(user, removedRoles);
 
                 return RedirectToAction("UserList");
             }

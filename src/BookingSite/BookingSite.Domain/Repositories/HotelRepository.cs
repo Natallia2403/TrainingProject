@@ -5,18 +5,18 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using BookingSite.Domain.DTO;
 using AutoMapper;
 
-namespace BookingSite.Domain.Logic.Managers
+namespace BookingSite.Domain.Repositories
 {
-    public class HotelManager : IHotelManager
+    public class HotelRepository : IHotelRepository
     {
         DataContext _dataContext;
         IMapper _mapper;
 
-        public HotelManager(DataContext dataContext, IMapper mapper)
+        public HotelRepository(DataContext dataContext, IMapper mapper)
         {
             _dataContext = dataContext ?? throw new ArgumentNullException(nameof(dataContext));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));

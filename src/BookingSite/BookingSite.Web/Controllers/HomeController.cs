@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using BookingSite.Data;
 using BookingSite.Data.Models;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using BookingSite.Web.ViewModels;
 using BookingSite.Domain.DTO;
 using Microsoft.AspNetCore.Identity;
@@ -21,23 +21,23 @@ namespace BookingSite.Web.Controllers
     public class HomeController : Controller
     {
         ILogger _logger;
-        IHotelManager _hotelManager;
-        IRoomManager _roomManager;
-        IBookingManager _bookingManager;
-        ICountryManager _countryManager;
-        private readonly UserManager<User> _userManager;
+        IHotelRepository _hotelRepository;
+        IRoomRepository _roomRepository;
+        IBookingRepository _bookingRepository;
+        ICountryRepository _countryRepository;
+        private readonly UserManager<User> _userRepository;
 
         public HomeController(ILogger<HomeController> logger,
-                                 IHotelManager hotelManager, IRoomManager roomManager, 
-                                 IBookingManager bookingManager, ICountryManager countryManager,
+                                 IHotelRepository hotelRepositary, IRoomRepository roomRepositary, 
+                                 IBookingRepository bookingRepositary, ICountryRepository countryRepositary,
                                  UserManager<User> userManager)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
-            _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
-            _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
-            _countryManager = countryManager ?? throw new ArgumentNullException(nameof(countryManager));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _hotelRepository = hotelRepositary ?? throw new ArgumentNullException(nameof(hotelRepositary));
+            _roomRepository = roomRepositary ?? throw new ArgumentNullException(nameof(roomRepositary));
+            _bookingRepository = bookingRepositary ?? throw new ArgumentNullException(nameof(bookingRepositary));
+            _countryRepository = countryRepositary ?? throw new ArgumentNullException(nameof(countryRepositary));
+            _userRepository = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<IActionResult> Index(int? country, string name, DateTime dateFrom, DateTime dateTo, 
@@ -47,7 +47,7 @@ namespace BookingSite.Web.Controllers
             var bb = CultureInfo.CurrentUICulture.Name;
 
             //страны
-            var countriesDto = await _countryManager.GetAllAsync();
+            var countriesDto = await _countryRepository.GetAllAsync();
             List<CountryDTO> countriesLst = countriesDto.ToList();
             // устанавливаем начальный элемент, который позволит выбрать всех
             CountryDTO allCountriesItem = new CountryDTO { Id = 0, Name = "Все" };
@@ -102,7 +102,7 @@ namespace BookingSite.Web.Controllers
 
             ViewBag.IsFiltered = isFiltered;
 
-            var hotelsDto = await _hotelManager.GetAllAsync();
+            var hotelsDto = await _hotelRepository.GetAllAsync();
 
             if (country != null && country != 0)
                 hotelsDto = hotelsDto.Where(p => p.CountryId == country);
@@ -150,7 +150,7 @@ namespace BookingSite.Web.Controllers
             var items = HotelDTOLst.Skip((pageTemp - 1) * pageSize).Take(pageSize);
 
             //страны
-            var countriesDto = await _countryManager.GetAllAsync();
+            var countriesDto = await _countryRepository.GetAllAsync();
             List<CountryDTO> countriesLst = countriesDto.ToList();
             // устанавливаем начальный элемент, который позволит выбрать всех
             CountryDTO allCountriesItem = new CountryDTO { Id = 0, Name = "Все" };
@@ -170,14 +170,14 @@ namespace BookingSite.Web.Controllers
 
         public async Task<IActionResult> HotelDetails(int? id, DateTime dateFrom, DateTime dateTo)
         {
-            var hotelDto = await _hotelManager.GetByIdAsync(id);
+            var hotelDto = await _hotelRepository.GetByIdAsync(id);
 
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
 
             foreach (var room in hotelDto.Rooms)
             {
-                var isCanBeBooked = _bookingManager.IsCanBeBookedAsync(room.Id, dateFrom, dateTo).Result;
+                var isCanBeBooked = _bookingRepository.IsCanBeBookedAsync(room.Id, dateFrom, dateTo).Result;
                 room.IsCanBeBooked = isCanBeBooked;
             }
 
@@ -187,12 +187,12 @@ namespace BookingSite.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> RoomDetails(int? id, DateTime dateFrom, DateTime dateTo)
         {
-            var dto = await _roomManager.GetByIdAsync(id);
+            var dto = await _roomRepository.GetByIdAsync(id);
 
             ViewBag.DateFrom = dateFrom;
             ViewBag.DateTo = dateTo;
 
-            var isCanBeBooked = await _bookingManager.IsCanBeBookedAsync(id, dateFrom, dateTo);
+            var isCanBeBooked = await _bookingRepository.IsCanBeBookedAsync(id, dateFrom, dateTo);
             ViewBag.IsCanBeBooked = isCanBeBooked;
 
             return View(dto);
@@ -219,11 +219,11 @@ namespace BookingSite.Web.Controllers
 
         private async Task<IActionResult> MakeBook(int? id, DateTime dateFrom, DateTime dateTo)
         {
-            var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+            var userId = _userRepository.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
 
             var dto = new BookingDTO { RoomId = id.Value, UserId = userId, DateFrom = dateFrom, DateTo = dateTo };
 
-            await _bookingManager.AddAsync(dto);
+            await _bookingRepository.AddAsync(dto);
 
             return RedirectToAction("Index", "Booking");
         }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingSite.Domain.Logic.Interfaces
+namespace BookingSite.Domain.Interfaces
 {
-    public interface IUserManager
+    public interface IUserRepository
     {
         User FindByNameAsync(string userName);
 

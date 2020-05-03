@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookingSite.Data.Models;
-using BookingSite.Domain.Logic.Interfaces;
+using BookingSite.Domain.Interfaces;
 using BookingSite.Web.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,29 +14,29 @@ namespace BookingSite.Web.Controllers
     public class BookingController : Controller
     {
         ILogger _logger;
-        IHotelManager _hotelManager;
-        ICountryManager _countryManager;
-        IRoomManager _roomManager;
-        private readonly UserManager<User> _userManager;
-        IBookingManager _bookingManager;
+        IHotelRepository _hotelRepository;
+        ICountryRepository _countryRepository;
+        IRoomRepository _roomRepository;
+        private readonly UserManager<User> _userRepository;
+        IBookingRepository _bookingRepository;
 
         public BookingController(ILogger<HomeController> logger,
-                                 IHotelManager hotelManager, ICountryManager countryManager,
-                                 IRoomManager roomManager, UserManager<User> userManager, IBookingManager bookingManager)
+                                 IHotelRepository hotelRepositary, ICountryRepository countryRepositary,
+                                 IRoomRepository roomRepositary, UserManager<User> userManager, IBookingRepository bookingRepositary)
         {
             _logger = logger;
-            _hotelManager = hotelManager ?? throw new ArgumentNullException(nameof(hotelManager));
-            _countryManager = countryManager ?? throw new ArgumentNullException(nameof(countryManager));
-            _roomManager = roomManager ?? throw new ArgumentNullException(nameof(roomManager));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            _bookingManager = bookingManager ?? throw new ArgumentNullException(nameof(bookingManager));
+            _hotelRepository = hotelRepositary ?? throw new ArgumentNullException(nameof(hotelRepositary));
+            _countryRepository = countryRepositary ?? throw new ArgumentNullException(nameof(countryRepositary));
+            _roomRepository = roomRepositary ?? throw new ArgumentNullException(nameof(roomRepositary));
+            _userRepository = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _bookingRepository = bookingRepositary ?? throw new ArgumentNullException(nameof(bookingRepositary));
         }
 
         public async Task<IActionResult> IndexAsync()
         {
-            var userId = _userManager.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
+            var userId = _userRepository.FindByNameAsync(HttpContext.User.Identity.Name).Result.Id;
 
-            var bookings = await _bookingManager.GetByUserId(userId);
+            var bookings = await _bookingRepository.GetByUserId(userId);
 
             BookingInfoViewModel viewModel = new BookingInfoViewModel
             {
@@ -49,7 +49,7 @@ namespace BookingSite.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> BookingDelete(int? id)
         {
-            await _bookingManager.DeleteAsync(id);
+            await _bookingRepository.DeleteAsync(id);
 
             return RedirectToAction("Index");
         }
